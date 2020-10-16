@@ -1,0 +1,36 @@
+
+Login:
+
+curl -X POST \
+  http://localhost:8080/login \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/json' \
+  -H 'Postman-Token: f81aa8e2-4de2-4f39-914d-148dfe202826' \
+  -d '{
+	"name":"grupo06",
+	"password":"grupo06"
+}'
+
+Start:
+
+curl -X POST \
+  http://localhost:8080/protocol/start \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMjgxMTkxNiwiZXhwIjoxNjAyODEyNTE2fQ.raMraR5Yqdgv97nf1eVjIOsC3oZKzaFBJ8k97vRhGDhsgHxbNVRowPksFaLei1MHBahgRuMtjHt_FBOE2ICfOA' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Postman-Token: b4a621fe-2c11-4ff3-9f3f-0a692c69903b'
+  
+All protocol's : 
+  
+curl -X GET \
+  http://localhost:8080/protocol/status \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMjgxMTkxNiwiZXhwIjoxNjAyODEyNTE2fQ.raMraR5Yqdgv97nf1eVjIOsC3oZKzaFBJ8k97vRhGDhsgHxbNVRowPksFaLei1MHBahgRuMtjHt_FBOE2ICfOA' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Postman-Token: 4daf50f2-b373-4978-9019-c4536ce69333'
+
+A protocol:
+
+  curl -X GET \
+  http://localhost:8080/protocol/status/2 \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMjgxMjYzNiwiZXhwIjoxNjAyODEzMjM2fQ.bDo6u-dxQhBe84lntqDwAS7298uVVMB1Xe6mHLJZaTHqq_wPI0pd4bbZexVkYTGUHXqCy9yjc5GbhfAXFswoTw' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Postman-Token: 5c1c4f3e-4278-4bb0-a07a-461ccd4e0662'
