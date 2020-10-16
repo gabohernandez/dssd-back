@@ -2,12 +2,10 @@ package com.grupo6.dssd.controller;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.grupo6.dssd.Constant;
 import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.UserRepository;
@@ -18,19 +16,18 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @RestController
 public class UserController {
 	
-	@Autowired
-	UserRepository repository;
+	final UserRepository repository;
+
+	public UserController(UserRepository repository) {
+		this.repository = repository;
+	}
 
 	@PostMapping("login")
-	public ResponseEntity login(@RequestBody User user) {
-		
-		if (this.repository.findByName(user.getName()) == null) {
+	public ResponseEntity<String> login(@RequestBody User user) {
+		if (repository.findByName(user.getName()) == null) {
 			return ResponseEntity.notFound().build();
 		}
-
 		String token = getJWTToken(user.getName());
-		
-//		User user = new User();
 		return ResponseEntity.ok(token);
 
 	}

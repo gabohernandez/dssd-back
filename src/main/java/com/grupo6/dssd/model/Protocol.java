@@ -22,8 +22,9 @@ public class Protocol {
 
 	public Protocol() {
 		starttime = LocalDateTime.now();
-		endtime = starttime.plusSeconds(10);
-		score = new Random().nextInt(10);
+		// Queda el endtime con un random entre 10 segundos y 60
+		endtime = starttime.plusSeconds(Math.abs(new Random().nextInt(60 - 10) + 10));
+		score = Math.abs(new Random().nextInt(10));
 	}
 
 	public Integer getId() {

@@ -8,7 +8,6 @@ import com.grupo6.dssd.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
 	
-	
-	public User findByName(String name);
+	User findByName(String name);
 
 }

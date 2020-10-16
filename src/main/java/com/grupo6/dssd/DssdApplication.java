@@ -20,16 +20,24 @@ public class DssdApplication {
 
 	@EnableWebSecurity
 	@Configuration
-	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
 			        .addFilterAfter(new JWTAuthorizationFilter(authenticationManager()),
 			                UsernamePasswordAuthenticationFilter.class)
-			        .authorizeRequests().antMatchers(HttpMethod.POST, "/login")
-			        // .antMatchers(HttpMethod.GET, "/process")
-			        .permitAll().anyRequest().authenticated();
+
+			        .authorizeRequests().antMatchers(HttpMethod.POST, "/login").permitAll()
+					// .antMatchers(HttpMethod.GET, "/process")
+					// Conf para habilitar la consola de h2
+					// si deja de funcionar algo, comentar
+					.and()
+					.headers().frameOptions().disable()
+					.and()
+					.authorizeRequests().antMatchers("/h2-console/**").permitAll()
+					////
+					.anyRequest().authenticated();
 		}
 	}
 
