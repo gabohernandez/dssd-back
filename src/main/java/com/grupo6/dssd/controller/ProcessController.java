@@ -1,37 +1,58 @@
 package com.grupo6.dssd.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.grupo6.dssd.model.Protocol;
 import com.grupo6.dssd.repository.ProtocolRepository;
 
+/**
+ * @author nahuel.barrena on 20/10/20
+ */
 @RestController
-@RequestMapping("/protocol")
+@RequestMapping("/project")
 public class ProcessController {
 
-	final ProtocolRepository repository;
+		private final ProtocolRepository repository;
 
-	public ProcessController(ProtocolRepository repository) {
-		this.repository = repository;
-	}
+		public ProcessController(ProtocolRepository repository) {
+			this.repository = repository;
+		}
 
-	@PostMapping("/start")
-	public ResponseEntity<String> start() {
-		Protocol protocol = repository.save(new Protocol());
-		return ResponseEntity.ok("Protocolo con id: " + protocol.getId() + " arrancado");
-	}
-	
-	@GetMapping("/status/{id}")
-	public ResponseEntity<Optional<Protocol>> status(@PathVariable Integer id) {
-		return ResponseEntity.ok(repository.findById(id));
-	}
+		@PostMapping("/{project_id}/protocol/create")
+		public ResponseEntity<String> createProtocol(
+				@PathVariable(name = "project_id") Long projectId
+		) {
+			Protocol protocol = repository.save(new Protocol());
+			return ResponseEntity.ok("Protocolo con id: " + protocol.getId() + " arrancado");
+		}
 
-	@GetMapping("/status")
-	public ResponseEntity<List<Protocol>> status() {
-		return ResponseEntity.ok(repository.findAll());
-	}
+
+		@PostMapping("/{project_id}/protocol/{protocol_id/start")
+		public ResponseEntity<String> startProtocol(
+				@PathVariable(name = "project_id") Long projectId,
+				@PathVariable(name = "protocol_id") Long protocolId
+		) {
+			Protocol protocol = repository.save(new Protocol());
+			return ResponseEntity.ok("Protocolo con id: " + protocol.getId() + " arrancado");
+		}
+
+		@GetMapping("{project_id}/protocol/{protocol_id}/status")
+		public ResponseEntity<Protocol> protocolStatus(
+				@PathVariable(name = "project_id") String projectId,
+				@PathVariable(name = "protocol_id") Long id
+		) {
+			return ResponseEntity.ok(repository.findById(id).orElse(new Protocol()));
+		}
+
+		@GetMapping("{project_id}/protocols/status")
+		public ResponseEntity<List<Protocol>> allProtocolStatus(
+				@PathVariable(name = "project_id") String projectId
+		) {
+			return ResponseEntity.ok(repository.findAll());
+		}
+
+
 
 }

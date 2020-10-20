@@ -5,15 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author nahuel.barrena on 19/10/20
+ */
+
 @Entity
-@Table(name = "AUTH_USER")
-public class User {
+@Table(name = "PROJECT")
+public class Project {
 
 	@Id
 	@GeneratedValue
 	private Long id;
 	private String name;
-	private String password;
 
 	public Long getId() {
 		return id;
@@ -30,13 +33,4 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 }

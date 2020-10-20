@@ -1,21 +1,39 @@
-DROP TABLE IF EXISTS auth_user;
+DROP SCHEMA IF EXISTS GRUPO_06;
+CREATE SCHEMA IF NOT EXISTS GRUPO_06;
+USE GRUPO_06;
+
+DROP TABLE IF EXISTS PROJECT;
+
+CREATE TABLE PROJECT (
+                         id INT AUTO_INCREMENT PRIMARY KEY,
+                         name VARCHAR(250) NOT NULL
+);
+
+
+
+DROP TABLE IF EXISTS AUTH_USER;
  
-CREATE TABLE auth_user (
-  id INT AUTO_INCREMENT  PRIMARY KEY,
+CREATE TABLE AUTH_USER (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(250) NOT NULL,
   password VARCHAR(250) NOT NULL
 );
  
-INSERT INTO auth_user (name, password) VALUES
+INSERT INTO AUTH_USER (name, password) VALUES
   ('grupo06', 'grupo06');
 
 
-DROP TABLE IF EXISTS protocol;
+DROP TABLE IF EXISTS PROTOCOL;
  
-CREATE TABLE protocol (
-  id INT AUTO_INCREMENT  PRIMARY KEY,
-  starttime datetime,
-  endtime datetime,
+CREATE TABLE PROTOCOL (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  start_time datetime,
+  end_time datetime,
   status VARCHAR(250),
-  score INT
+  score INT,
+  PROJECT_ID int not null,
+  FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT(id)
+
 );
+
+

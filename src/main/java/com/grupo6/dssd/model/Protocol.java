@@ -3,56 +3,58 @@ package com.grupo6.dssd.model;
 import java.time.LocalDateTime;
 import java.util.Random;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Table
 @Entity
+@Table(name = "PROTOCOL")
 public class Protocol {
 
 	@Id
 	@GeneratedValue
-	private Integer id;
-	private LocalDateTime starttime;
-	private LocalDateTime endtime;
+	private Long id;
+
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 	private String status;
 	private Integer score;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "project_id")
+	private Project project;
+
 	public Protocol() {
-		starttime = LocalDateTime.now();
+		startTime = LocalDateTime.now();
 		// Queda el endtime con un random entre 10 segundos y 60
-		endtime = starttime.plusSeconds(Math.abs(new Random().nextInt(60 - 10) + 10));
+		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(60 - 10) + 10));
 		score = Math.abs(new Random().nextInt(10));
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public LocalDateTime getStarttime() {
-		return starttime;
+	public LocalDateTime getStartTime() {
+		return startTime;
 	}
 
-	public void setStarttime(LocalDateTime starttime) {
-		this.starttime = starttime;
+	public void setStartTime(LocalDateTime starttime) {
+		this.startTime = starttime;
 	}
 
-	public LocalDateTime getEndtime() {
-		return endtime;
+	public LocalDateTime getEndTime() {
+		return endTime;
 	}
 
-	public void setEndtime(LocalDateTime endtime) {
-		this.endtime = endtime;
+	public void setEndTime(LocalDateTime endtime) {
+		this.endTime = endtime;
 	}
 
 	public String getStatus() {
-		return this.getEndtime().isBefore(LocalDateTime.now()) ? "Finalizado" : "En proceso";
+		return this.getEndTime().isBefore(LocalDateTime.now()) ? "Finalizado" : "En proceso";
 	}
 
 	public void setStatus(String status) {
@@ -67,4 +69,11 @@ public class Protocol {
 		this.score = score;
 	}
 
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 }

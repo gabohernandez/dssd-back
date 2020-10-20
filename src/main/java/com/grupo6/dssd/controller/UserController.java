@@ -22,7 +22,7 @@ public class UserController {
 		this.repository = repository;
 	}
 
-	@PostMapping("login")
+	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody User user) {
 		if (repository.findByName(user.getName()) == null) {
 			return ResponseEntity.notFound().build();
