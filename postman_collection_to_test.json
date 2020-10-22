@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "1c444dbf-e342-4fba-9ab1-f1294255de85",
+		"name": "dssd",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Project",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMzMyNzgwMiwiZXhwIjoxNjAzMzI5MDAyfQ.eBe_gpT4f79dLWkXarG77Z785S7f8hkHnLuaRe2VO4uRtQDVtu6TsCSl4rEmN_Rm_XeQG7SZbo_2KIdYTzgL7A",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Proyecto Salvador de la B\"\t\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/project/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"grupo06\",\n\t\"password\": \"grupo06\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Protocol",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMzMyNzgwMiwiZXhwIjoxNjAzMzI5MDAyfQ.eBe_gpT4f79dLWkXarG77Z785S7f8hkHnLuaRe2VO4uRtQDVtu6TsCSl4rEmN_Rm_XeQG7SZbo_2KIdYTzgL7A",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/project/1/protocol/create",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"1",
+						"protocol",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Project",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMzMyNzgwMiwiZXhwIjoxNjAzMzI5MDAyfQ.eBe_gpT4f79dLWkXarG77Z785S7f8hkHnLuaRe2VO4uRtQDVtu6TsCSl4rEmN_Rm_XeQG7SZbo_2KIdYTzgL7A",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/project/1/protocol/2/start",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"1",
+						"protocol",
+						"2",
+						"start"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Protocol Status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMzMyNzgwMiwiZXhwIjoxNjAzMzI5MDAyfQ.eBe_gpT4f79dLWkXarG77Z785S7f8hkHnLuaRe2VO4uRtQDVtu6TsCSl4rEmN_Rm_XeQG7SZbo_2KIdYTzgL7A",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/project/1/protocol/2/status",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"1",
+						"protocol",
+						"2",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All Protocols",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJncnVwbzA2Iiwic3ViIjoiZ3J1cG8wNiIsImlhdCI6MTYwMzMyNzgwMiwiZXhwIjoxNjAzMzI5MDAyfQ.eBe_gpT4f79dLWkXarG77Z785S7f8hkHnLuaRe2VO4uRtQDVtu6TsCSl4rEmN_Rm_XeQG7SZbo_2KIdYTzgL7A",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/project/1/protocols/status",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"1",
+						"protocols",
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

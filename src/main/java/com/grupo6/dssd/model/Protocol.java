@@ -2,8 +2,14 @@ package com.grupo6.dssd.model;
 
 import java.time.LocalDateTime;
 import java.util.Random;
-
 import javax.persistence.*;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.MoreObjects;
+
+import antlr.StringUtils;
 
 @Entity
 @Table(name = "PROTOCOL")
@@ -13,20 +19,30 @@ public class Protocol {
 	@GeneratedValue
 	private Long id;
 
+	@Column(name = "START_TIME")
 	private LocalDateTime startTime;
+
+	@Column(name = "END_TIME")
 	private LocalDateTime endTime;
-	private String status;
+
+	@Column(name = "STATUS")
+	@Enumerated(EnumType.STRING)
+	private ProtocolStatus status;
+
 	private Integer score;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	private Project project;
 
-	public Protocol() {
-		startTime = LocalDateTime.now();
-		// Queda el endtime con un random entre 10 segundos y 60
-		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(60 - 10) + 10));
-		score = Math.abs(new Random().nextInt(10));
+	public Protocol(){}
+
+	public Protocol(Project projectDto) {
+		status = ProtocolStatus.PENDING;
+		project = projectDto;
+		startTime = LocalDateTime.MAX;
+		endTime = LocalDateTime.MAX;
+		score = 0;
 	}
 
 	public Long getId() {
@@ -53,16 +69,21 @@ public class Protocol {
 		this.endTime = endtime;
 	}
 
-	public String getStatus() {
-		return this.getEndTime().isBefore(LocalDateTime.now()) ? "Finalizado" : "En proceso";
+	public ProtocolStatus getStatus() {
+		if(!status.equals(ProtocolStatus.FINISHED) && LocalDateTime.now().isAfter(endTime)){
+			this.finish();
+		}
+		return status;
 	}
 
-	public void setStatus(String status) {
+
+
+	public void setStatus(ProtocolStatus status) {
 		this.status = status;
 	}
 
 	public Integer getScore() {
-		return getStatus().equals("Finalizado") ? score : null;
+		return score;
 	}
 
 	public void setScore(Integer score) {
@@ -75,5 +96,43 @@ public class Protocol {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public void finish(){
+		this.setStatus(ProtocolStatus.FINISHED);
+		this.setScore(Math.abs(new Random().nextInt(100)));
+	}
+
+	public void start(){
+		status = ProtocolStatus.STARTED;
+		startTime = LocalDateTime.now();
+		// Queda el endtime con un random entre 10 segundos y 120
+		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(120 - 10) + 10));
+
+	}
+
+	@JsonIgnore
+	public boolean isStarted(){
+		return this.getStatus().equals(ProtocolStatus.STARTED);
+	}
+
+	@JsonIgnore
+	public boolean isPending(){
+		return this.getStatus().equals(ProtocolStatus.PENDING);
+	}
+
+	@JsonIgnore
+	public boolean isFinished() {
+		return this.getStatus().equals(ProtocolStatus.FINISHED);
+	}
+
+	@JsonIgnore
+	public boolean isFailed() {
+		return this.getStatus().equals(ProtocolStatus.FAILED);
+	}
+
+	@Override
+	public String toString(){
+			return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }
