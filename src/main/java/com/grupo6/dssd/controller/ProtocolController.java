@@ -44,7 +44,7 @@ public class ProtocolController {
 		return ResponseEntity.ok(protocolService.getProtocol(projectId, protocolId));
 	}
 
-	@GetMapping("{project_id}/protocols/status")
+	@GetMapping("/protocols/status")
 	public ResponseEntity<List<Protocol>> allProtocolStatus(
 			@PathVariable(name = "project_id") String projectId) {
 		return ResponseEntity.ok(protocolService.findAll());
