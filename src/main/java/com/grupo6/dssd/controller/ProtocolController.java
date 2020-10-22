@@ -37,7 +37,7 @@ public class ProtocolController {
 		return ResponseEntity.ok(protocolService.startProtocol(projectId, protocolId));
 	}
 
-	@GetMapping("{project_id}/protocol/{protocol_id}/status")
+	@GetMapping("/{project_id}/protocol/{protocol_id}/status")
 	public ResponseEntity<Protocol> getProtocol(
 			@PathVariable(name = "project_id") Long projectId, @PathVariable(name = "protocol_id") Long protocolId)
 			throws InvalidProjectException, ProtocolNotFoundException, InvalidOperationException {
@@ -45,8 +45,7 @@ public class ProtocolController {
 	}
 
 	@GetMapping("/protocols/status")
-	public ResponseEntity<List<Protocol>> allProtocolStatus(
-			@PathVariable(name = "project_id") String projectId) {
+	public ResponseEntity<List<Protocol>> allProtocolStatus() {
 		return ResponseEntity.ok(protocolService.findAll());
 	}
 
