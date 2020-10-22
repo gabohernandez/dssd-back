@@ -2,6 +2,7 @@ package com.grupo6.dssd.controller;
 
 import java.util.Date;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,8 +25,8 @@ public class UserController {
 
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody User user) {
-		if (repository.findByName(user.getName()) == null) {
-			return ResponseEntity.notFound().build();
+		if(!repository.findByNameAndPassword(user.getName(), user.getPassword()).isPresent()) {
+			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
 		}
 		String token = getJWTToken(user.getName());
 		return ResponseEntity.ok(token);
@@ -39,7 +40,7 @@ public class UserController {
 //		        .claim("authorities",
 //		                grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 		        .setIssuedAt(new Date(System.currentTimeMillis()))
-		        .setExpiration(new Date(System.currentTimeMillis() + 600000))
+		        .setExpiration(new Date(System.currentTimeMillis() + 1200000))
 		        .signWith(SignatureAlgorithm.HS512, Constant.SECRET_KEY.getBytes()).compact();
 
 		return Constant.AUTHORIZATION_TYPE + token;

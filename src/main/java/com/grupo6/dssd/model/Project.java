@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * @author nahuel.barrena on 19/10/20
  */
@@ -17,6 +20,13 @@ public class Project {
 	@GeneratedValue
 	private Long id;
 	private String name;
+
+	public Project() {
+	}
+
+	public Project(String name) {
+		this.name = name;
+	}
 
 	public Long getId() {
 		return id;
@@ -32,5 +42,10 @@ public class Project {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String toString(){
+		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }
