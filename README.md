@@ -1,19 +1,17 @@
-DOCUMENTACION SWAGGER
+HEROKU
 
-// PARA SWAGGER VER http://localhost:8080/swagger-ui.html#/
-// SWAGGER VER http://localhost:8080/v2/api-docs
+https://dssd-grupo06.herokuapp.com/
 
-* FALTAN AGREGAR ENTIDADES AL MODELO
-* FALTAN AGREGAR ENDPOINTS 
+DOCUMENTACION SWAGGER 
 
+***(Local)***
 
-Respuesta mail Jose
+* PARA SWAGGER VER http://localhost:8080/swagger-ui.html#/
 
--que el protocolo que quieran iniciar exista
+***(Heroku)***
 
--que el mismo esté asociado al proyecto por el cual lo quieren iniciar
+* https://dssd-grupo06.herokuapp.com/swagger-ui.html#
 
--que el mismo no haya sido iniciado ya previamente.
+PRUEBAS
 
-Luego, la consulta de estado del protocolo debería chequear condiciones similares y contestar el estado del mismo (podría pasar que el protocolo en cuestión no exista, o no esté iniciado y esto deberían chequearlo).
-
+* Ver archivo `postman_collection_to_test.json`
