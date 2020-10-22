@@ -37,7 +37,6 @@ public class ProjectController {
 	public ResponseEntity<Project> createProject(@RequestBody CreateProjectDTO createProjectDTO) {
 		return ResponseEntity.ok(projectRepository.save(new Project(createProjectDTO.getName())));
 	}
-
 	// DELETE ??
 
 }

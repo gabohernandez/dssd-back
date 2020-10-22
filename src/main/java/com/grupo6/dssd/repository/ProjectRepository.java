@@ -9,4 +9,5 @@ import com.grupo6.dssd.model.Project;
  */
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+
 }
