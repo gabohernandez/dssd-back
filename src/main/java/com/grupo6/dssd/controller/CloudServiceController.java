@@ -8,13 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.grupo6.dssd.api.request.CreateProjectDTO;
 import com.grupo6.dssd.model.Project;
 import com.grupo6.dssd.model.Protocol;
 import com.grupo6.dssd.repository.ProjectRepository;
 import com.grupo6.dssd.repository.ProtocolRepository;
-import com.grupo6.dssd.service.ProtocolService;
 
 @RestController
 @RequestMapping("/cloud-service")

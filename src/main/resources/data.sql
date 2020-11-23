@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS PROTOCOL;
-DROP TABLE IF EXISTS AUTH_USER;
+DROP TABLE IF EXISTS LAB_USER;
+DROP TABLE IF EXISTS ROLE;
 DROP TABLE IF EXISTS PROJECT;
 
 CREATE TABLE PROJECT (
@@ -7,10 +8,17 @@ CREATE TABLE PROJECT (
                          name VARCHAR(250) NOT NULL
 );
 
-CREATE TABLE AUTH_USER (
+CREATE TABLE ROLE (
+  id INT PRIMARY KEY,
+  name VARCHAR(250) NOT NULL
+);
+
+CREATE TABLE LAB_USER (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(250) NOT NULL,
-  password VARCHAR(250) NOT NULL
+  password VARCHAR(250) NOT NULL,
+  role_id int not null
+
 );
 
 CREATE TABLE PROTOCOL (
@@ -24,7 +32,11 @@ CREATE TABLE PROTOCOL (
 
 );
 
-INSERT INTO AUTH_USER (name, password) VALUES ('grupo06', 'grupo06');
+
+INSERT INTO ROLE (id, name) VALUES (1, 'ADMIN');
+INSERT INTO ROLE (id, name) VALUES (2, 'USER');
+INSERT INTO LAB_USER (name, password, role_id) VALUES ('juan perez', 'juan.perez', '1');
+INSERT INTO LAB_USER (name, password, role_id) VALUES ('maria gonzales', 'maria.gonzalez', '1');
 
 
 

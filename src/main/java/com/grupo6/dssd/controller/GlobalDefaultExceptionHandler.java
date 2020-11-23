@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.grupo6.dssd.exception.CustomBadRequestException;
 import com.grupo6.dssd.exception.CustomNotFoundException;
-import com.grupo6.dssd.exception.ProjectNotFoundException;
 
 /**
  * @author nahuel.barrena on 21/10/20

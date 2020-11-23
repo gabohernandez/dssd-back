@@ -1,4 +1,4 @@
-package com.grupo6.dssd.controller;
+package com.grupo6.dssd.controller.remote;
 
 import java.util.List;
 

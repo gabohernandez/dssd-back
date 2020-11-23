@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Nano",
+    "user_name": "Chapu1",
+    "email": "abc@xyza.aaa",
+    "password": "easyPass",
+    "role": {
+      "id": 1
+    }
+  },
+  {
+    "name": "Nano",
+    "user_name": "Chapu2",
+    "email": "abc@xyzb.aaa",
+    "password": "easyPass",
+    "role": {
+      "id": 1
+    }
+  },
+  {
+    "name": "Nano",
+    "user_name": "Chapu3",
+    "email": "abc@xyzc.aaa",
+    "password": "easyPass",
+    "role": {
+      "id": 2
+    }
+  },
+  {
+    "name": "Nano",
+    "user_name": "Chapu4",
+    "email": "abc@xyzd.aaa",
+    "password": "easyPass",
+    "role": {
+      "id": 2
+    }
+  },
+  {
+    "name": "willFailOnUpdate",
+    "user_name": "willFailOnUpdate",
+    "email": "willFail@OnUpdate.aaa",
+    "password": "easyPass",
+    "role": {
+      "id": 2
+    }
+  }
+]

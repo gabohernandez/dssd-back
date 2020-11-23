@@ -1,23 +1,31 @@
 package com.grupo6.dssd.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
-@Table(name = "AUTH_USER")
+@Table(name = "LAB_USER")
 public class User {
 
-	@Id
-	@GeneratedValue
 	private Long id;
 	private String name;
 	private String password;
+	private Role role;
 
+	public User(){}
+
+	public User(Long id, String name, String password, Role role) {
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.role = role;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
 	public Long getId() {
 		return id;
 	}
@@ -26,6 +34,7 @@ public class User {
 		this.id = id;
 	}
 
+	@Column(name = "NAME", nullable = false, length = 30, unique = true)
 	public String getName() {
 		return name;
 	}
@@ -34,12 +43,23 @@ public class User {
 		this.name = name;
 	}
 
+	@Column(name = "PASSWORD", nullable = false)
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@JoinColumn(name = "ROLE_ID")
+	@ManyToOne(fetch = FetchType.EAGER)
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
-package com.grupo6.dssd.controller;
+package com.grupo6.dssd.controller.remote;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupo6.dssd.Constant;
+import com.grupo6.dssd.client.bonita.BonitaAPIClient;
 import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.UserRepository;
 
@@ -16,21 +18,29 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
 public class UserController {
-	
-	final UserRepository repository;
 
-	public UserController(UserRepository repository) {
+	final UserRepository repository;
+	final BonitaAPIClient bonitaAPIClient;
+
+	public UserController(UserRepository repository, BonitaAPIClient bonitaAPIClient) {
 		this.repository = repository;
+		this.bonitaAPIClient = bonitaAPIClient;
 	}
 
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody User user) {
-		if(!repository.findByNameAndPassword(user.getName(), user.getPassword()).isPresent()) {
+		Optional<User> foundUser = repository.findByNameAndPassword(user.getName(), user.getPassword());
+		if(!foundUser.isPresent()) {
 			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
 		}
-		String token = getJWTToken(user.getName());
-		return ResponseEntity.ok(token);
-
+		bonitaAPIClient.login(foundUser.get());
+/*
+		ProcessResponse process = bonitaAPIClient.getProcess();
+		CaseResponse caseResponse = bonitaAPIClient.postCase();
+*/
+		String authToken = getJWTToken(user.getName());
+		return ResponseEntity.ok(authToken);
 	}
 
 	private String getJWTToken(String username) {
