@@ -15,6 +15,9 @@ public class Protocol {
 	@Id
 	@GeneratedValue
 	private Long id;
+	
+	@Column
+	private String name;
 
 	@Column(name = "START_TIME")
 	private LocalDateTime startTime;
@@ -31,6 +34,10 @@ public class Protocol {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	private Project project;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_assigned_id")
+	private User user;
 
 	public Protocol(){}
 
@@ -48,6 +55,14 @@ public class Protocol {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public LocalDateTime getStartTime() {
@@ -93,6 +108,14 @@ public class Protocol {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void finish(){

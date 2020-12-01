@@ -1,15 +1,21 @@
 package com.grupo6.dssd.controller.remote;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.grupo6.dssd.Constant;
 import com.grupo6.dssd.client.bonita.BonitaAPIClient;
-import com.grupo6.dssd.client.bonita.cases.CaseResponse;
 import com.grupo6.dssd.client.bonita.process.ProcessResponse;
 import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.UserRepository;
@@ -42,6 +48,11 @@ public class UserController {
 		bonitaAPIClient.postProtocols("", new ArrayList<>());
 		String authToken = getJWTToken(user.getName());
 		return ResponseEntity.ok(authToken);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<User>> getUsers(){
+		return ResponseEntity.ok(this.repository.findAll());
 	}
 
 	private String getJWTToken(String username) {
