@@ -23,6 +23,12 @@ public class ProtocolController {
 	public ProtocolController(ProtocolService protocolService) {
 		this.protocolService = protocolService;
 	}
+	
+	@GetMapping("/{project_id}/protocol")
+	public ResponseEntity<List<Protocol>> findProtocolFroProject(
+			@PathVariable(name = "project_id") Long projectId) throws ProjectNotFoundException {
+		return ResponseEntity.ok(protocolService.findByProject(projectId));
+	}
 
 	@PostMapping("/{project_id}/protocol/create")
 	public ResponseEntity<Protocol> createProtocol(

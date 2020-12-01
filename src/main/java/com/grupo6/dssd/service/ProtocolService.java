@@ -72,4 +72,8 @@ public class ProtocolService {
 	public List<Protocol> findAll() {
 		return this.protocolRepository.findAll();
 	}
+
+	public List<Protocol> findByProject(Long projectId) {
+		return this.protocolRepository.findByProjectId(projectId);
+	}
 }
