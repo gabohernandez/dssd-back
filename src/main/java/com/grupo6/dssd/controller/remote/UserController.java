@@ -1,7 +1,6 @@
 package com.grupo6.dssd.controller.remote;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupo6.dssd.Constant;
 import com.grupo6.dssd.client.bonita.BonitaAPIClient;
+import com.grupo6.dssd.client.bonita.cases.CaseResponse;
+import com.grupo6.dssd.client.bonita.process.ProcessResponse;
 import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.UserRepository;
 
@@ -35,10 +36,10 @@ public class UserController {
 			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
 		}
 		bonitaAPIClient.login(foundUser.get());
-/*
-		ProcessResponse process = bonitaAPIClient.getProcess();
-		CaseResponse caseResponse = bonitaAPIClient.postCase();
-*/
+		List<ProcessResponse> process = bonitaAPIClient.getProcesses();
+		List<Map<String, Object>> list = new ArrayList<>();
+		list.add(new HashMap<>());
+		bonitaAPIClient.postProtocols("", new ArrayList<>());
 		String authToken = getJWTToken(user.getName());
 		return ResponseEntity.ok(authToken);
 	}

@@ -7,9 +7,6 @@ import javax.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.MoreObjects;
-
-import antlr.StringUtils;
 
 @Entity
 @Table(name = "PROTOCOL")
