@@ -211,7 +211,7 @@ public class BonitaAPIClient extends BonitaBaseClient {
 				.header("Cookie", bonitaSession.getCookieHeaders())
 				.body(BodyInserters.fromValue(body))
 				.retrieve()
-				.toBodilessEntity().block().getStatusCode().
+				.toBodilessEntity().block().getStatusCode();
 		;
 	}
 

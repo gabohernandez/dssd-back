@@ -41,12 +41,9 @@ public class UserController {
 		if(!foundUser.isPresent()) {
 			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
 		}
-		bonitaAPIClient.login(foundUser.get());
-		List<ProcessResponse> process = bonitaAPIClient.getProcesses();
-		List<Map<String, Object>> list = new ArrayList<>();
-		list.add(new HashMap<>());
-		bonitaAPIClient.postProtocols("", new ArrayList<>());
-		String authToken = getJWTToken(user.getName());
+		//bonitaAPIClient.login(foundUser.get());
+		//bonitaAPIClient.postProtocols("", new ArrayList<>());
+		String authToken = getJWTToken(foundUser.get());
 		return ResponseEntity.ok(authToken);
 	}
 	
@@ -55,11 +52,11 @@ public class UserController {
 		return ResponseEntity.ok(this.repository.findAll());
 	}
 
-	private String getJWTToken(String username) {
+	private String getJWTToken(User user) {
 //		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
 
-		String token = Jwts.builder().setId(Constant.SECRET_KEY).setSubject(username)
-//		        .claim("authorities",
+		String token = Jwts.builder().setId(Constant.SECRET_KEY).setSubject(user.getName())
+		        .claim("role", user.getRole().getName())
 //		                grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 		        .setIssuedAt(new Date(System.currentTimeMillis()))
 		        .setExpiration(new Date(System.currentTimeMillis() + 1200000))
