@@ -87,4 +87,18 @@ public class ProtocolService {
 	public List<Protocol> findByProject(Long projectId) {
 		return this.protocolRepository.findByProjectId(projectId);
 	}
+	
+	public List<Protocol> findByUser(Long userId) {
+		return this.protocolRepository.findByUserId(userId);
+	}
+
+	public Protocol score(Long protocolId, Integer score) throws Exception {
+		Optional<Protocol> protocol = protocolRepository.findById(protocolId);
+		if (protocol.isPresent()) {
+			protocol.get().setScore(score);
+			return protocolRepository.save(protocol.get());
+		}else {
+			throw new Exception("Protocolo no encontrado");
+		}
+	}
 }

@@ -46,7 +46,7 @@ public class Protocol {
 		project = projectDto;
 		startTime = LocalDateTime.MAX;
 		endTime = LocalDateTime.MAX;
-		score = 0;
+		score = null;
 	}
 
 	public Long getId() {

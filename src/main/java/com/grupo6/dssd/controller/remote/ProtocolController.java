@@ -17,7 +17,6 @@ import com.grupo6.dssd.service.ProtocolService;
  * @author nahuel.barrena on 20/10/20
  */
 @RestController
-@RequestMapping("/project")
 public class ProtocolController {
 
 	private final ProtocolService protocolService;
@@ -26,36 +25,51 @@ public class ProtocolController {
 		this.protocolService = protocolService;
 	}
 	
-	@GetMapping("/{project_id}/protocol")
+	@GetMapping("/project/{project_id}/protocol")
 	public ResponseEntity<List<Protocol>> findProtocolFroProject(
 			@PathVariable(name = "project_id") Long projectId) throws ProjectNotFoundException {
 		return ResponseEntity.ok(protocolService.findByProject(projectId));
 	}
 
-	@PostMapping("/{project_id}/protocol/create")
+	@PostMapping("/project/{project_id}/protocol/create")
 	public ResponseEntity<Protocol> createProtocol(
 			@PathVariable(name = "project_id") Long projectId,
 			@RequestBody CreateProtocolDTO protocol) throws ProjectNotFoundException {
 		return ResponseEntity.ok(protocolService.createProtocol(projectId, protocol));
 	}
 
-	@PostMapping("/{project_id}/protocol/{protocol_id}/start")
+	@PostMapping("/project/{project_id}/protocol/{protocol_id}/start")
 	public ResponseEntity<Protocol> startProtocol(
 			@PathVariable(name = "project_id") Long projectId, @PathVariable(name = "protocol_id") Long protocolId)
 			throws InvalidProjectException, ProtocolNotFoundException, InvalidOperationException {
 		return ResponseEntity.ok(protocolService.startProtocol(projectId, protocolId));
 	}
 
-	@GetMapping("/{project_id}/protocol/{protocol_id}/status")
+	@GetMapping("/project/{project_id}/protocol/{protocol_id}/status")
 	public ResponseEntity<Protocol> getProtocol(
 			@PathVariable(name = "project_id") Long projectId, @PathVariable(name = "protocol_id") Long protocolId)
 			throws InvalidProjectException, ProtocolNotFoundException, InvalidOperationException {
 		return ResponseEntity.ok(protocolService.getProtocol(projectId, protocolId));
 	}
 
-	@GetMapping("/protocols/status")
+	@GetMapping("/project/protocols/status")
 	public ResponseEntity<List<Protocol>> allProtocolStatus() {
 		return ResponseEntity.ok(protocolService.findAll());
+	}
+	
+	@GetMapping("/protocols/{user_id}/my-protocols")
+	public ResponseEntity<List<Protocol>> myProtocols(@PathVariable(name = "user_id") Long userId) {
+		//TODO: No deberíamos recibir el id por parámetro sino sacarlo del jwt
+		return ResponseEntity.ok(protocolService.findByUser(userId));
+	}
+	
+	@PostMapping("/protocols/{protocol_id}/score/{score}")
+	public ResponseEntity score(@PathVariable(name = "protocol_id") Long protocolId,@PathVariable(name = "score") Integer score) {
+		try {
+			return ResponseEntity.ok(protocolService.score(protocolId, score));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 }

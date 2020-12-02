@@ -11,5 +11,7 @@ import com.grupo6.dssd.model.Protocol;
 public interface ProtocolRepository extends JpaRepository<Protocol, Long> {
 
 	List<Protocol> findByProjectId(Long projectId);
+	
+	List<Protocol> findByUserId(Long userId);
 
 }
