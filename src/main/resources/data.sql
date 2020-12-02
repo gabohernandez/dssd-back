@@ -25,6 +25,7 @@ CREATE TABLE PROTOCOL (
   id INT AUTO_INCREMENT PRIMARY KEY,
   start_time datetime,
   name VARCHAR(250) NULL,
+  local INT NULL,
   end_time datetime,
   status VARCHAR(250),
   score INT,

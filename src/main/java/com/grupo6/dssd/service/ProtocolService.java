@@ -36,6 +36,7 @@ public class ProtocolService {
 	public Protocol createProtocol(Long projectId, CreateProtocolDTO protocolDTO) throws ProjectNotFoundException {
 		Protocol protocol = new Protocol(this.getProjectById(projectId));
 		protocol.setName(protocolDTO.getName());
+		protocol.setLocal(protocolDTO.isLocal());
 		Optional<User> user = userRepository.findById(protocolDTO.getUserId());
 		if (user.isPresent()) {
 			protocol.setUser(user.get());
