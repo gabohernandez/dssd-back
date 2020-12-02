@@ -102,4 +102,10 @@ public class ProtocolService {
 			throw new Exception("Protocolo no encontrado");
 		}
 	}
+
+	public void startProject(Long projectId) throws Exception {
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new Exception("No hay proyecto."));
+		project.setStatus("STARTED");
+		projectRepository.save(project);
+	}
 }
