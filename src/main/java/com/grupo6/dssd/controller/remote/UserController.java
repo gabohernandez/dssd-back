@@ -50,7 +50,7 @@ public class UserController {
 		return ResponseEntity.ok(authToken);
 	}
 	
-	@GetMapping
+	@GetMapping("user")
 	public ResponseEntity<List<User>> getUsers(){
 		return ResponseEntity.ok(this.repository.findAll());
 	}

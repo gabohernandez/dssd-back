@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.grupo6.dssd.api.request.CreateProtocolDTO;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
 import com.grupo6.dssd.exception.ProjectNotFoundException;
@@ -32,8 +34,9 @@ public class ProtocolController {
 
 	@PostMapping("/{project_id}/protocol/create")
 	public ResponseEntity<Protocol> createProtocol(
-			@PathVariable(name = "project_id") Long projectId) throws ProjectNotFoundException {
-		return ResponseEntity.ok(protocolService.createProtocol(projectId));
+			@PathVariable(name = "project_id") Long projectId,
+			@RequestBody CreateProtocolDTO protocol) throws ProjectNotFoundException {
+		return ResponseEntity.ok(protocolService.createProtocol(projectId, protocol));
 	}
 
 	@PostMapping("/{project_id}/protocol/{protocol_id}/start")

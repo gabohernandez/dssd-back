@@ -1,18 +1,21 @@
 package com.grupo6.dssd.service;
 
 import java.util.List;
-
-import javax.transaction.Transactional;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import com.grupo6.dssd.api.request.CreateProtocolDTO;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
 import com.grupo6.dssd.exception.ProjectNotFoundException;
 import com.grupo6.dssd.exception.ProtocolNotFoundException;
 import com.grupo6.dssd.model.Project;
 import com.grupo6.dssd.model.Protocol;
+import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.ProjectRepository;
 import com.grupo6.dssd.repository.ProtocolRepository;
+import com.grupo6.dssd.repository.UserRepository;
 
 /**
  * @author nahuel.barrena on 21/10/20
@@ -22,14 +25,22 @@ public class ProtocolService {
 
 	private final ProtocolRepository protocolRepository;
 	private final ProjectRepository projectRepository;
+	private final UserRepository userRepository;
 
-	public ProtocolService(ProtocolRepository protocolRepository, ProjectRepository projectRepository) {
+	public ProtocolService(ProtocolRepository protocolRepository, ProjectRepository projectRepository, UserRepository userRepository) {
 		this.protocolRepository = protocolRepository;
 		this.projectRepository = projectRepository;
+		this.userRepository = userRepository;
 	}
 
-	public Protocol createProtocol(Long projectId) throws ProjectNotFoundException {
-		return protocolRepository.save(new Protocol(this.getProjectById(projectId)));
+	public Protocol createProtocol(Long projectId, CreateProtocolDTO protocolDTO) throws ProjectNotFoundException {
+		Protocol protocol = new Protocol(this.getProjectById(projectId));
+		protocol.setName(protocolDTO.getName());
+		Optional<User> user = userRepository.findById(protocolDTO.getUserId());
+		if (user.isPresent()) {
+			protocol.setUser(user.get());
+		}
+		return protocolRepository.save(protocol);
 	}
 
 	public Protocol startProtocol(Long projectId, Long protocolId)

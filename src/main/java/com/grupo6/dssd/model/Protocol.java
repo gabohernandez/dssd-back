@@ -16,7 +16,7 @@ public class Protocol {
 	@GeneratedValue
 	private Long id;
 	
-	@Column
+	@Column(name = "NAME")
 	private String name;
 
 	@Column(name = "START_TIME")
