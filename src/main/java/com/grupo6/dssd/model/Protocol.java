@@ -18,6 +18,9 @@ public class Protocol {
 	
 	@Column(name = "NAME")
 	private String name;
+	
+	@Column(name = "LOCAL")
+	private boolean local;
 
 	@Column(name = "START_TIME")
 	private LocalDateTime startTime;
@@ -63,6 +66,14 @@ public class Protocol {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public boolean isLocal() {
+		return local;
+	}
+
+	public void setLocal(boolean local) {
+		this.local = local;
 	}
 
 	public LocalDateTime getStartTime() {

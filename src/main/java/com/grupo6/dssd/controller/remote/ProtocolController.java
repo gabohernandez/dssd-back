@@ -38,6 +38,14 @@ public class ProtocolController {
 		return ResponseEntity.ok(protocolService.createProtocol(projectId, protocol));
 	}
 
+	@PostMapping("/project/{project_id}/start")
+	public ResponseEntity<Void> startProject(
+			@PathVariable(name = "project_id") Long projectId) throws Exception {
+		this.protocolService.startProject(projectId);
+		// TODO pegada a bonita para comenzar tarea y carga protocolos al proyecto.
+		return ResponseEntity.ok().build();
+	}
+
 	@PostMapping("/project/{project_id}/protocol/{protocol_id}/start")
 	public ResponseEntity<Protocol> startProtocol(
 			@PathVariable(name = "project_id") Long projectId, @PathVariable(name = "protocol_id") Long protocolId)

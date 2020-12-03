@@ -41,8 +41,7 @@ public class UserController {
 		if(!foundUser.isPresent()) {
 			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
 		}
-		bonitaAPIClient.login(foundUser.get());
-		String authToken = getJWTToken(user);
+		String authToken = getJWTToken(foundUser.get());
 		return ResponseEntity.ok(authToken);
 	}
 	
@@ -53,9 +52,8 @@ public class UserController {
 
 	private String getJWTToken(User user) {
 //		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
-
 		String token = Jwts.builder().setId(Constant.SECRET_KEY).setSubject(user.getName())
-		        .claim("role", "role_usuario")
+		        .claim("role", user.getRole().getName())
 //		                grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 		        .setIssuedAt(new Date(System.currentTimeMillis()))
 		        .setExpiration(new Date(System.currentTimeMillis() + 1200000))
