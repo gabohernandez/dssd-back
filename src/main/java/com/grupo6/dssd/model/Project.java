@@ -18,7 +18,7 @@ public class Project {
 	private Long id;
 	private String name;
 	@Column(name = "STATUS")
-	private String status;
+	private String status = "PENDING";
 
 	public Project() {
 	}
