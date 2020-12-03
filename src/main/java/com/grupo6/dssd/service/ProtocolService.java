@@ -1,5 +1,6 @@
 package com.grupo6.dssd.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import com.grupo6.dssd.exception.ProjectNotFoundException;
 import com.grupo6.dssd.exception.ProtocolNotFoundException;
 import com.grupo6.dssd.model.Project;
 import com.grupo6.dssd.model.Protocol;
+import com.grupo6.dssd.model.ProtocolStatus;
 import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.ProjectRepository;
 import com.grupo6.dssd.repository.ProtocolRepository;
@@ -85,8 +87,12 @@ public class ProtocolService {
 		return this.protocolRepository.findAll();
 	}
 
-	public List<Protocol> findByProject(Long projectId) {
-		return this.protocolRepository.findByProjectId(projectId);
+	public List<Protocol> findByProject(Long projectId) throws ProjectNotFoundException {
+		List<Protocol> protocols = new ArrayList<>();
+		projectRepository.findById(projectId).filter(p -> p.getStatus().equalsIgnoreCase("STARTED"))
+				.map(p -> protocols.addAll(this.protocolRepository.findByProjectId(projectId)))
+				.orElseThrow(() -> new ProjectNotFoundException("No hay projecto con id " + projectId));
+		return protocols;
 	}
 	
 	public List<Protocol> findByUser(Long userId) {
@@ -97,6 +103,7 @@ public class ProtocolService {
 		Optional<Protocol> protocol = protocolRepository.findById(protocolId);
 		if (protocol.isPresent()) {
 			protocol.get().setScore(score);
+			protocol.get().setStatus(ProtocolStatus.FINISHED);
 			return protocolRepository.save(protocol.get());
 		}else {
 			throw new Exception("Protocolo no encontrado");
