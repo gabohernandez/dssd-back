@@ -57,6 +57,7 @@ public class UserController {
 
 		String token = Jwts.builder().setId(Constant.SECRET_KEY).setSubject(user.getName())
 		        .claim("role", user.getRole().getName())
+		        .claim("id", user.getId())
 //		                grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 		        .setIssuedAt(new Date(System.currentTimeMillis()))
 		        .setExpiration(new Date(System.currentTimeMillis() + 1200000))
