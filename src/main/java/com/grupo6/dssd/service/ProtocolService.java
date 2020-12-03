@@ -89,15 +89,19 @@ public class ProtocolService {
 	}
 
 	public List<Protocol> findByProject(Long projectId)  {
-		List<Protocol> protocols = new ArrayList<>();
-		projectRepository.findById(projectId).filter(p -> p.getStatus().equalsIgnoreCase("STARTED"))
-				.ifPresent(p -> protocols.addAll(this.protocolRepository.findByProjectId(projectId)));
-
-		return protocols;
+		return this.protocolRepository.findByProjectId(projectId);
 	}
 	
 	public List<Protocol> findByUser(Long userId) {
-		return this.protocolRepository.findByUserId(userId);
+		List<Protocol> fromStartedProject = new ArrayList<>();
+		List<Protocol> protocols = this.protocolRepository.findByUserId(userId);
+		protocols.forEach(p -> {
+					if (p.getProject().getStatus().equalsIgnoreCase("STARTED")){
+						fromStartedProject.add(p);
+					}
+				}
+		);
+		return fromStartedProject;
 	}
 
 	public Protocol score(Long protocolId, Integer score) throws Exception {
