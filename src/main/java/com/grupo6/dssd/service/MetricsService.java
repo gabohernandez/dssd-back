@@ -1,9 +1,12 @@
 package com.grupo6.dssd.service;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.springframework.stereotype.Service;
 import com.grupo6.dssd.model.Project;
 import com.grupo6.dssd.model.Protocol;
@@ -44,19 +47,28 @@ public class MetricsService {
 		metrics.put("usuario_mas_protocolos_asignados", this.getMostBusyUser());
 		// TODO VER LO DEL TIEMPO DE ASIGNACION vs EJECUCION
 		//metrics.put("tiempo_entre_asignacion_y_ejecucion", "");
-		// TODO
+
 		metrics.put("tiempo_ejecucion_por_protocolo", this.getTiempoEjecucionPorProtocolo(protocols));
 		// TODO
 		metrics.put("tiempo_promedio_ejecucion_protocolos", this.getTiempoPromedioEjecucionProtocolos(protocols));
 		return metrics;
 	}
 
-	private Object getTiempoPromedioEjecucionProtocolos(List<Protocol> protocols) {
-		return null;
+	private double getTiempoPromedioEjecucionProtocolos(List<Protocol> protocols) {
+		OptionalDouble averageMillis = protocols.stream()
+				.mapToLong(x -> Duration.between(x.getStartTime(), x.getEndTime()).toMillis()).average();
+		return ((averageMillis.orElse(0) / 1000) % 60);
+
 	}
 
-	private Object getTiempoEjecucionPorProtocolo(List<Protocol> protocols) {
-		return null;
+	private Map<String, String> getTiempoEjecucionPorProtocolo(List<Protocol> protocols) {
+		Map<String, String> map = new HashMap<>();
+		protocols.forEach(p -> {
+					Duration protocolDuration = Duration.between(p.getStartTime(), p.getEndTime());
+					map.put(p.getName(), DurationFormatUtils.formatDuration(protocolDuration.toMillis(), "H:mm:ss", true));
+				}
+		);
+		return map;
 	}
 
 	private User getMostBusyUser() {
