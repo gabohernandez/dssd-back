@@ -62,7 +62,7 @@ public class ProtocolController {
 
 	@GetMapping("/project/protocols/status")
 	public ResponseEntity<List<Protocol>> allProtocolStatus() {
-		return ResponseEntity.ok(protocolService.findAll());
+		return ResponseEntity.ok(protocolService.findAllProtocols());
 	}
 	
 	@GetMapping("/protocols/{user_id}/my-protocols")

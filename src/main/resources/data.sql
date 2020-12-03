@@ -30,6 +30,7 @@ CREATE TABLE PROTOCOL (
   end_time datetime,
   status VARCHAR(250),
   score INT,
+  approved BOOLEAN NULL,
   USER_ASSIGNED_ID int null,
   PROJECT_ID int not null,
   FOREIGN KEY (PROJECT_ID) REFERENCES PROJECT(id),
