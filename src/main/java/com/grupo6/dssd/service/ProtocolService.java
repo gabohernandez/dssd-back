@@ -1,10 +1,10 @@
 package com.grupo6.dssd.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
 import com.grupo6.dssd.api.request.CreateProtocolDTO;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
@@ -12,6 +12,7 @@ import com.grupo6.dssd.exception.ProjectNotFoundException;
 import com.grupo6.dssd.exception.ProtocolNotFoundException;
 import com.grupo6.dssd.model.Project;
 import com.grupo6.dssd.model.Protocol;
+import com.grupo6.dssd.model.ProtocolStatus;
 import com.grupo6.dssd.model.User;
 import com.grupo6.dssd.repository.ProjectRepository;
 import com.grupo6.dssd.repository.ProtocolRepository;
@@ -37,9 +38,9 @@ public class ProtocolService {
 		Protocol protocol = new Protocol(this.getProjectById(projectId));
 		protocol.setName(protocolDTO.getName());
 		protocol.setLocal(protocolDTO.isLocal());
-		Optional<User> user = userRepository.findById(protocolDTO.getUserId());
-		if (user.isPresent()) {
-			protocol.setUser(user.get());
+		if(protocolDTO.getUserId() != null) {
+			Optional<User> user = userRepository.findById(protocolDTO.getUserId());
+			user.ifPresent(protocol::setUser);
 		}
 		return protocolRepository.save(protocol);
 	}
@@ -81,22 +82,39 @@ public class ProtocolService {
 				"El proyecto con id " + projectId + " no existe. Imposible crear el protocolo."));
 	}
 
-	public List<Protocol> findAll() {
+	public List<Protocol> findAllProtocols() {
 		return this.protocolRepository.findAll();
 	}
 
-	public List<Protocol> findByProject(Long projectId) {
+	public List<Project> findAllProjects() {
+		return projectRepository.findAll();
+	}
+
+	public User getMostBusyUser() {
+		return protocolRepository.busiestUser().get(0);
+	}
+
+	public List<Protocol> findByProject(Long projectId)  {
 		return this.protocolRepository.findByProjectId(projectId);
 	}
 	
 	public List<Protocol> findByUser(Long userId) {
-		return this.protocolRepository.findByUserId(userId);
+		List<Protocol> fromStartedProject = new ArrayList<>();
+		List<Protocol> protocols = this.protocolRepository.findByUserId(userId);
+		protocols.forEach(p -> {
+					if (p.getProject().getStatus().equalsIgnoreCase("STARTED")){
+						fromStartedProject.add(p);
+					}
+				}
+		);
+		return fromStartedProject;
 	}
 
 	public Protocol score(Long protocolId, Integer score) throws Exception {
 		Optional<Protocol> protocol = protocolRepository.findById(protocolId);
 		if (protocol.isPresent()) {
 			protocol.get().setScore(score);
+			protocol.get().setStatus(ProtocolStatus.FINISHED);
 			return protocolRepository.save(protocol.get());
 		}else {
 			throw new Exception("Protocolo no encontrado");
