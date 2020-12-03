@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
 import com.grupo6.dssd.api.request.CreateProtocolDTO;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
@@ -39,9 +38,11 @@ public class ProtocolService {
 		Protocol protocol = new Protocol(this.getProjectById(projectId));
 		protocol.setName(protocolDTO.getName());
 		protocol.setLocal(protocolDTO.isLocal());
-		Optional<User> user = userRepository.findById(protocolDTO.getUserId());
-		if (user.isPresent()) {
-			protocol.setUser(user.get());
+		if(protocolDTO.getUserId() != null) {
+			Optional<User> user = userRepository.findById(protocolDTO.getUserId());
+			if (user.isPresent()) {
+				protocol.setUser(user.get());
+			}
 		}
 		return protocolRepository.save(protocol);
 	}
@@ -87,11 +88,11 @@ public class ProtocolService {
 		return this.protocolRepository.findAll();
 	}
 
-	public List<Protocol> findByProject(Long projectId) throws ProjectNotFoundException {
+	public List<Protocol> findByProject(Long projectId)  {
 		List<Protocol> protocols = new ArrayList<>();
 		projectRepository.findById(projectId).filter(p -> p.getStatus().equalsIgnoreCase("STARTED"))
-				.map(p -> protocols.addAll(this.protocolRepository.findByProjectId(projectId)))
-				.orElseThrow(() -> new ProjectNotFoundException("No hay projecto con id " + projectId));
+				.ifPresent(p -> protocols.addAll(this.protocolRepository.findByProjectId(projectId)));
+
 		return protocols;
 	}
 	
