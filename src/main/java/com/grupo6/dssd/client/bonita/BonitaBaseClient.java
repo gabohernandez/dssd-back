@@ -6,7 +6,6 @@ import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.*;
-import com.grupo6.dssd.client.bonita.process.ProcessResponse;
 
 /**
  * @author nahuel.barrena on 22/11/20
