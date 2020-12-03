@@ -40,9 +40,7 @@ public class ProtocolService {
 		protocol.setLocal(protocolDTO.isLocal());
 		if(protocolDTO.getUserId() != null) {
 			Optional<User> user = userRepository.findById(protocolDTO.getUserId());
-			if (user.isPresent()) {
-				protocol.setUser(user.get());
-			}
+			user.ifPresent(protocol::setUser);
 		}
 		return protocolRepository.save(protocol);
 	}
@@ -84,8 +82,16 @@ public class ProtocolService {
 				"El proyecto con id " + projectId + " no existe. Imposible crear el protocolo."));
 	}
 
-	public List<Protocol> findAll() {
+	public List<Protocol> findAllProtocols() {
 		return this.protocolRepository.findAll();
+	}
+
+	public List<Project> findAllProjects() {
+		return projectRepository.findAll();
+	}
+
+	public User getMostBusyUser() {
+		return protocolRepository.busiestUser().get(0);
 	}
 
 	public List<Protocol> findByProject(Long projectId)  {

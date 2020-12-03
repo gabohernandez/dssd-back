@@ -42,6 +42,9 @@ public class Protocol {
 	@JoinColumn(name = "user_assigned_id")
 	private User user;
 
+	@Column(name = "APPROVED")
+	private boolean approved;
+
 	public Protocol(){}
 
 	public Protocol(Project projectDto) {
@@ -50,6 +53,7 @@ public class Protocol {
 		startTime = LocalDateTime.MAX;
 		endTime = LocalDateTime.MAX;
 		score = null;
+		approved = false;
 	}
 
 	public Long getId() {
@@ -129,9 +133,22 @@ public class Protocol {
 		this.user = user;
 	}
 
+	public boolean isApproved() {
+		return score != null && score > 7;
+	}
+
+	public void setApproved() {
+		this.approved = isApproved();
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
 	public void finish(){
 		this.setStatus(ProtocolStatus.FINISHED);
-		this.setScore(Math.abs(new Random().nextInt(100)));
+		this.setScore(Math.abs(new Random().nextInt(10)));
+		this.setApproved();
 	}
 
 	public void start(){
