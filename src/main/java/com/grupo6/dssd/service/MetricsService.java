@@ -10,6 +10,7 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.springframework.stereotype.Service;
 import com.grupo6.dssd.model.Project;
 import com.grupo6.dssd.model.Protocol;
+import com.grupo6.dssd.model.ProtocolStatus;
 import com.grupo6.dssd.model.User;
 
 /**
@@ -38,6 +39,7 @@ public class MetricsService {
 		Map<String, Object> metrics = new HashMap<>();
 		List<Protocol> protocols = protocolService.findAllProtocols();
 		List<Project> projects = protocolService.findAllProjects();
+		if(!(projects.isEmpty() && protocols .isEmpty())) {
 		metrics.put("aprobados_totales", this.getAprobadosTotales(protocols));
 		metrics.put("fallidos_totales", this.getFallidosTotales(protocols));
 		// TODO ver como contar cada reintento
@@ -47,10 +49,9 @@ public class MetricsService {
 		metrics.put("usuario_mas_protocolos_asignados", this.getMostBusyUser());
 		// TODO VER LO DEL TIEMPO DE ASIGNACION vs EJECUCION
 		//metrics.put("tiempo_entre_asignacion_y_ejecucion", "");
-
 		metrics.put("tiempo_ejecucion_por_protocolo", this.getTiempoEjecucionPorProtocolo(protocols));
-		// TODO
 		metrics.put("tiempo_promedio_ejecucion_protocolos", this.getTiempoPromedioEjecucionProtocolos(protocols));
+		}
 		return metrics;
 	}
 
@@ -91,7 +92,7 @@ public class MetricsService {
 
 	private String getFallidosTotales(List<Protocol> protocols) {
 		try {
-			return String.valueOf(protocols.stream().filter(p -> !p.isApproved()).count() / protocols.size());
+			return String.valueOf(protocols.stream().filter(p -> !p.isApproved() && p.getStatus().equals(ProtocolStatus.FAILED)).count() / protocols.size());
 		} catch (Exception e) {
 			return "";
 		}
@@ -99,7 +100,7 @@ public class MetricsService {
 
 	private String getAprobadosTotales(List<Protocol> protocols) {
 		try {
-			return String.valueOf(protocols.stream().filter(Protocol::isApproved).count() / protocols.size());
+			return String.valueOf(protocols.stream().filter(p -> p.isApproved() && p.getStatus().equals(ProtocolStatus.FINISHED)).count() / protocols.size());
 		} catch (Exception e) {
 			return "";
 		}

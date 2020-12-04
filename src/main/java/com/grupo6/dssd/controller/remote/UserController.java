@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,20 +42,19 @@ public class UserController {
 		if(!foundUser.isPresent()) {
 			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
 		}
-		//bonitaAPIClient.login(foundUser.get());
-		//bonitaAPIClient.postProtocols("", new ArrayList<>());
 		String authToken = getJWTToken(foundUser.get());
 		return ResponseEntity.ok(authToken);
 	}
 	
 	@GetMapping("user")
 	public ResponseEntity<List<User>> getUsers(){
-		return ResponseEntity.ok(this.repository.findAll());
+
+		return ResponseEntity.ok(this.repository.findAll().stream().filter(u -> u.getRole().getName().equalsIgnoreCase("USER")).collect(
+				Collectors.toList()));
 	}
 
 	private String getJWTToken(User user) {
 //		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
-
 		String token = Jwts.builder().setId(Constant.SECRET_KEY).setSubject(user.getName())
 		        .claim("role", user.getRole().getName())
 		        .claim("id", user.getId())

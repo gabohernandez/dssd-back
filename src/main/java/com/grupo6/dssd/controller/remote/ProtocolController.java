@@ -12,6 +12,7 @@ import com.grupo6.dssd.exception.ProjectNotFoundException;
 import com.grupo6.dssd.exception.ProtocolNotFoundException;
 import com.grupo6.dssd.model.Protocol;
 import com.grupo6.dssd.service.ProtocolService;
+import com.grupo6.dssd.service.bonita.BonitaService;
 
 /**
  * @author nahuel.barrena on 20/10/20
@@ -20,13 +21,15 @@ import com.grupo6.dssd.service.ProtocolService;
 public class ProtocolController {
 
 	private final ProtocolService protocolService;
+	private final BonitaService bonitaService;
 
-	public ProtocolController(ProtocolService protocolService) {
+	public ProtocolController(ProtocolService protocolService, BonitaService bonitaService) {
 		this.protocolService = protocolService;
+		this.bonitaService = bonitaService;
 	}
 	
 	@GetMapping("/project/{project_id}/protocol")
-	public ResponseEntity<List<Protocol>> findProtocolFroProject(
+	public ResponseEntity<List<Protocol>> findProtocolForProject(
 			@PathVariable(name = "project_id") Long projectId) throws ProjectNotFoundException {
 		return ResponseEntity.ok(protocolService.findByProject(projectId));
 	}
@@ -35,6 +38,7 @@ public class ProtocolController {
 	public ResponseEntity<Protocol> createProtocol(
 			@PathVariable(name = "project_id") Long projectId,
 			@RequestBody CreateProtocolDTO protocol) throws ProjectNotFoundException {
+
 		return ResponseEntity.ok(protocolService.createProtocol(projectId, protocol));
 	}
 
@@ -42,7 +46,7 @@ public class ProtocolController {
 	public ResponseEntity<Void> startProject(
 			@PathVariable(name = "project_id") Long projectId) throws Exception {
 		this.protocolService.startProject(projectId);
-		// TODO pegada a bonita para comenzar tarea y carga protocolos al proyecto.
+		this.bonitaService.postProtocols(protocolService.findByProject(projectId));
 		return ResponseEntity.ok().build();
 	}
 
@@ -72,7 +76,7 @@ public class ProtocolController {
 	}
 	
 	@PostMapping("/protocols/{protocol_id}/score/{score}")
-	public ResponseEntity score(@PathVariable(name = "protocol_id") Long protocolId,@PathVariable(name = "score") Integer score) {
+	public ResponseEntity<Object> score(@PathVariable(name = "protocol_id") Long protocolId,@PathVariable(name = "score") Integer score) {
 		try {
 			return ResponseEntity.ok(protocolService.score(protocolId, score));
 		} catch (Exception e) {
