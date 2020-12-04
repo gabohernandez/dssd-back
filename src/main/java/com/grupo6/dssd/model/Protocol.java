@@ -45,6 +45,9 @@ public class Protocol {
 	@Column(name = "APPROVED")
 	private boolean approved;
 
+	@Column(name = "BONITA_ASSIGNED_ID")
+	private long userAssignId;
+
 	public Protocol(){}
 
 	public Protocol(Project projectDto) {
@@ -145,10 +148,22 @@ public class Protocol {
 		this.approved = approved;
 	}
 
+	public long getUserAssignId() {
+		return userAssignId;
+	}
+
+	public void setUserAssignId(long userAssignId) {
+		this.userAssignId = userAssignId;
+	}
+
 	public void finish(){
 		this.setStatus(ProtocolStatus.FINISHED);
-		this.setScore(Math.abs(new Random().nextInt(10)));
-		this.setApproved();
+		this.setApproved(true);
+	}
+
+	public void toFail(){
+		this.setStatus(ProtocolStatus.FAILED);
+		this.setApproved(false);
 	}
 
 	public void start(){

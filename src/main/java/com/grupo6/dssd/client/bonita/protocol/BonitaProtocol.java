@@ -8,17 +8,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BonitaProtocol {
 
 	private long id;
-	@JsonProperty(value = "persistence_id")
+	@JsonProperty(value = "persistenceId")
 	private String persistenceId;
 	private String nombre;
-	private int responsable;
-	private int resultado;
+	private String responsable;
 	@JsonProperty(value = "ejecucion_local")
 	private boolean ejecucionLocal;
 	private boolean activo;
-	private boolean exitoso;
-	@JsonProperty(value = "ejecucion_id")
-	private long ejecucionId;
+	@JsonProperty(value = "proyecto_id")
+	private long proyectoId;
 
 	public long getId() {
 		return id;
@@ -44,20 +42,12 @@ public class BonitaProtocol {
 		this.nombre = nombre;
 	}
 
-	public int getResponsable() {
+	public String getResponsable() {
 		return responsable;
 	}
 
-	public void setResponsable(int responsable) {
+	public void setResponsable(String responsable) {
 		this.responsable = responsable;
-	}
-
-	public int getResultado() {
-		return resultado;
-	}
-
-	public void setResultado(int resultado) {
-		this.resultado = resultado;
 	}
 
 	public boolean isEjecucionLocal() {
@@ -76,20 +66,12 @@ public class BonitaProtocol {
 		this.activo = activo;
 	}
 
-	public boolean isExitoso() {
-		return exitoso;
+	public long getProyectoId() {
+		return proyectoId;
 	}
 
-	public void setExitoso(boolean exitoso) {
-		this.exitoso = exitoso;
-	}
-
-	public long getEjecucionId() {
-		return ejecucionId;
-	}
-
-	public void setEjecucionId(long ejecucionId) {
-		this.ejecucionId = ejecucionId;
+	public void setProyectoId(long proyectoId) {
+		this.proyectoId = proyectoId;
 	}
 }
 

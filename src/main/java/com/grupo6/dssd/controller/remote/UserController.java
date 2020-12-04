@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,9 @@ public class UserController {
 	
 	@GetMapping("user")
 	public ResponseEntity<List<User>> getUsers(){
-		return ResponseEntity.ok(this.repository.findAll());
+
+		return ResponseEntity.ok(this.repository.findAll().stream().filter(u -> u.getRole().getName().equalsIgnoreCase("USER")).collect(
+				Collectors.toList()));
 	}
 
 	private String getJWTToken(User user) {

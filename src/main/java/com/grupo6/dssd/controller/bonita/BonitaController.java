@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupo6.dssd.client.bonita.BonitaAPIClient;
+import com.grupo6.dssd.client.bonita.users.BonitaUserResponse;
 
 /**
  * @author nahuel.barrena on 1/12/20
@@ -22,10 +23,10 @@ public class BonitaController {
 		this.bonitaClient = bonitaClient;
 	}
 
-	/*@GetMapping(value = "/users")
-	public ResponseEntity<List<Map<String, Object>>> getUsers(){
+	@GetMapping(value = "/users")
+	public ResponseEntity<List<BonitaUserResponse>> getUsers(){
 		return ResponseEntity.ok(bonitaClient.getUsers());
-	}*/
+	}
 
 
 }

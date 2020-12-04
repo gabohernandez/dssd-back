@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.grupo6.dssd.api.request.CreateProtocolDTO;
+import com.grupo6.dssd.client.bonita.BonitaAPIClient;
+import com.grupo6.dssd.client.bonita.cases.CaseResponse;
+import com.grupo6.dssd.client.bonita.process.ProcessResponse;
+import com.grupo6.dssd.client.bonita.protocol.BonitaProtocolResult;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
 import com.grupo6.dssd.exception.ProjectNotFoundException;
@@ -27,20 +32,28 @@ public class ProtocolService {
 	private final ProtocolRepository protocolRepository;
 	private final ProjectRepository projectRepository;
 	private final UserRepository userRepository;
+	private final BonitaAPIClient bonitaAPIClient;
 
-	public ProtocolService(ProtocolRepository protocolRepository, ProjectRepository projectRepository, UserRepository userRepository) {
+	public ProtocolService(ProtocolRepository protocolRepository, ProjectRepository projectRepository,
+			UserRepository userRepository, BonitaAPIClient bonitaAPIClient) {
 		this.protocolRepository = protocolRepository;
 		this.projectRepository = projectRepository;
 		this.userRepository = userRepository;
+		this.bonitaAPIClient = bonitaAPIClient;
 	}
 
 	public Protocol createProtocol(Long projectId, CreateProtocolDTO protocolDTO) throws ProjectNotFoundException {
+
 		Protocol protocol = new Protocol(this.getProjectById(projectId));
 		protocol.setName(protocolDTO.getName());
 		protocol.setLocal(protocolDTO.isLocal());
 		if(protocolDTO.getUserId() != null) {
 			Optional<User> user = userRepository.findById(protocolDTO.getUserId());
 			user.ifPresent(protocol::setUser);
+			int idToAssign = bonitaAPIClient.getUsers().stream()
+					.filter(u -> u.userName.equalsIgnoreCase(protocol.getUser().getName())).findFirst().get().id;
+			protocol.setUserAssignId(idToAssign);
+
 		}
 		return protocolRepository.save(protocol);
 	}
@@ -113,8 +126,16 @@ public class ProtocolService {
 	public Protocol score(Long protocolId, Integer score) throws Exception {
 		Optional<Protocol> protocol = protocolRepository.findById(protocolId);
 		if (protocol.isPresent()) {
+			Integer taskId = bonitaAPIClient.getTasks().stream().filter(task -> task.name.contains("Ejecutar protocolo") && String.valueOf(task.caseId).equalsIgnoreCase(protocol.get().getProject().getCaseId())).findFirst().get().id;
+			bonitaAPIClient.assignUserTask(taskId.toString(), String.valueOf(protocol.get().getUserAssignId()));
 			protocol.get().setScore(score);
-			protocol.get().setStatus(ProtocolStatus.FINISHED);
+			if(score >= 7) {
+				 protocol.get().finish();
+			}
+			else {
+				protocol.get().toFail();
+			}
+			bonitaAPIClient.scoreProtocol(taskId.toString(), new BonitaProtocolResult(score.toString(), score >= 7));
 			return protocolRepository.save(protocol.get());
 		}else {
 			throw new Exception("Protocolo no encontrado");
@@ -125,5 +146,11 @@ public class ProtocolService {
 		Project project = projectRepository.findById(projectId).orElseThrow(() -> new Exception("No hay proyecto."));
 		project.setStatus("STARTED");
 		projectRepository.save(project);
+		protocolRepository.findByProjectId(projectId).forEach(
+				protocol -> {
+					protocol.start();
+					protocolRepository.save(protocol);
+				}
+		);
 	}
 }
