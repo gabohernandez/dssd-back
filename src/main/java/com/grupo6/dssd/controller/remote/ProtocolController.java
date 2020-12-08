@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.grupo6.dssd.api.request.ActionEnum;
 import com.grupo6.dssd.api.request.CreateProtocolDTO;
+import com.grupo6.dssd.api.request.DecideProtocolAction;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
 import com.grupo6.dssd.exception.ProjectNotFoundException;
@@ -83,5 +85,21 @@ public class ProtocolController {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
+
+	@PostMapping("/project/{project_id}/protocol/{protocol_id}/decision")
+	public ResponseEntity<Object> decide(
+			@PathVariable(name = "protocol_id") Long protocolId,
+			@PathVariable(name = "project_id") Long projectId,
+			@RequestBody DecideProtocolAction decideProtocolAction
+	) {
+		try {
+			ActionEnum toDecide = ActionEnum.fromId(decideProtocolAction.getAction());
+			protocolService.decideOnFailedProtocol(protocolId, toDecide);
+			return ResponseEntity.ok(null);
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
 
 }

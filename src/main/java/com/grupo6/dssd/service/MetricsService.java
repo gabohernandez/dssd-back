@@ -78,7 +78,7 @@ public class MetricsService {
 
 	private long getFinalizadosError(List<Project> projects) {
 		return projects.stream()
-				.filter(project -> project.getStatus().equalsIgnoreCase("FAILED"))
+				.filter(project -> project.getStatus().equalsIgnoreCase("CANCELLED"))
 				.count();
 
 	}

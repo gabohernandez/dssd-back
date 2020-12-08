@@ -8,7 +8,8 @@ CREATE TABLE PROJECT (
                          name VARCHAR(250) NOT NULL,
                          status VARCHAR(250) NOT NULL,
                          BONITA_PROCESS_ID VARCHAR(250) NULL,
-                         BONITA_CASE_ID VARCHAR(250) NULL
+                         BONITA_CASE_ID VARCHAR(250) NULL,
+                         BONITA_ASSIGNED_ID VARCHAR(250) NULL
 );
 
 CREATE TABLE ROLE (

@@ -45,7 +45,7 @@ public class ProjectController {
 		Integer userIdForAssign = bonitaAPIClient.getUsers().stream().filter(u -> u.job_title.contains("Responsable del proy")).findFirst().get().id;
 		Integer taskId = bonitaAPIClient.getTasks().stream().filter(task -> task.name.contains("protocolos necesarios") && task.caseId == caseId).findFirst().get().id;
 		bonitaAPIClient.assignUserTask(taskId.toString(), userIdForAssign.toString());
-		return ResponseEntity.ok(projectRepository.save(new Project(createProjectDTO.getName(), processId.toString(), caseId.toString())));
+		return ResponseEntity.ok(projectRepository.save(new Project(createProjectDTO.getName(), processId.toString(), caseId.toString(), userIdForAssign.toString())));
 	}
 
 }

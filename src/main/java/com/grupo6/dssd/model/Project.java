@@ -23,6 +23,8 @@ public class Project {
 	private String processId;
 	@Column(name = "BONITA_CASE_ID")
 	private String caseId;
+	@Column(name = "BONITA_ASSIGNED_ID")
+	private String assignedId;
 
 	public Project() {
 	}
@@ -31,10 +33,11 @@ public class Project {
 		this.name = name;
 	}
 
-	public Project(String name, String processId, String caseId) {
+	public Project(String name, String processId, String caseId, String assignedId) {
 		this.name = name;
 		this.processId = processId;
 		this.caseId = caseId;
+		this.assignedId = assignedId;
 	}
 
 	public Long getId() {
@@ -75,6 +78,14 @@ public class Project {
 
 	public void setCaseId(String caseId) {
 		this.caseId = caseId;
+	}
+
+	public String getAssignedId() {
+		return assignedId;
+	}
+
+	public void setAssignedId(String assignedId) {
+		this.assignedId = assignedId;
 	}
 
 	@Override

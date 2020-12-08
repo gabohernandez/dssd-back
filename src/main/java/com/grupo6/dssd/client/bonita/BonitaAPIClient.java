@@ -197,8 +197,9 @@ public class BonitaAPIClient extends BonitaBaseClient {
 	public Object createProtocols(String userTaskId, List<BonitaProtocol> protocols, int idProject)	{
 		this.login();
 		Map<String, Object> body = new HashMap<>();
-		Map<String, Object> protocolos = new HashMap<>();
+		body.put("protocolosInput", new ArrayList<>());
 		protocols.forEach(p -> {
+			Map<String, Object> protocolos = new HashMap<>();
 			protocolos.put("id", p.getId());
 			protocolos.put("nombre", p.getNombre());
 			protocolos.put("responsable", p.getResponsable());
@@ -206,9 +207,16 @@ public class BonitaAPIClient extends BonitaBaseClient {
 			protocolos.put("persistenceId", p.getPersistenceId());
 			protocolos.put("ejecucion_local", p.isEjecucionLocal());
 			protocolos.put("proyecto_id", p.getProyectoId());
+			((List<Object>) body.get("protocolosInput")).add(protocolos);
 		});
-		body.put("protocolosInput", Arrays.asList(protocolos));
 		body.put("id_proyecto", idProject);
+		return executeTask(userTaskId, body);
+	}
+
+	public Object decideOnFailProtocol(String userTaskId, String decision) {
+		this.login();
+		Map<String, Object> body = new HashMap<>();
+		body.put("decision", decision);
 		return executeTask(userTaskId, body);
 	}
 
@@ -319,7 +327,4 @@ public class BonitaAPIClient extends BonitaBaseClient {
 			);
 		}
 	}
-
-
-
 }
