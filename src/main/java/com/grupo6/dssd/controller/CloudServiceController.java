@@ -35,13 +35,12 @@ public class CloudServiceController {
 		//Clean Database
 		jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
 	    try {
-	        Iterator var1 = Arrays.asList("Protocol","Project").iterator();//getTableNames(jdbcTemplate).iterator();
+			//getTableNames(jdbcTemplate).iterator();
 
-	        while(var1.hasNext()) {
-	            String tableName = (String)var1.next();
-	            jdbcTemplate.execute("TRUNCATE TABLE " + tableName + " RESTART IDENTITY;");
-	            //jdbcTemplate.execute("ALTER SEQUENCE " + tableName + "_SEQ_ID RESTART WITH 1");
-	        }
+			for (String tableName : Arrays.asList("Protocol", "Project")) {
+				jdbcTemplate.execute("TRUNCATE TABLE " + tableName + " RESTART IDENTITY;");
+				//jdbcTemplate.execute("ALTER SEQUENCE " + tableName + "_SEQ_ID RESTART WITH 1");
+			}
 	        
 	    } finally {
 	        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY TRUE");

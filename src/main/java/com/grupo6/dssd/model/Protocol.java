@@ -31,6 +31,9 @@ public class Protocol {
 
 	private Integer score;
 
+	@Column(name = "UUID")
+	private String randomUUID;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
 	private Project project;
@@ -43,6 +46,16 @@ public class Protocol {
 		startTime = LocalDateTime.MAX;
 		endTime = LocalDateTime.MAX;
 		score = 0;
+	}
+
+	public Protocol(Project projectDto, String randomUUID) {
+		status = ProtocolStatus.PENDING;
+		project = projectDto;
+		startTime = LocalDateTime.MAX;
+		endTime = LocalDateTime.MAX;
+		score = 0;
+		this.randomUUID = randomUUID;
+
 	}
 
 	public Long getId() {
@@ -70,9 +83,6 @@ public class Protocol {
 	}
 
 	public ProtocolStatus getStatus() {
-		if(!status.equals(ProtocolStatus.FINISHED) && LocalDateTime.now().isAfter(endTime)){
-			this.finish();
-		}
 		return status;
 	}
 
@@ -99,16 +109,24 @@ public class Protocol {
 	}
 
 	public void finish(){
-		this.setStatus(ProtocolStatus.FINISHED);
-		this.setScore(Math.abs(new Random().nextInt(100)));
+		this.setScore(Math.abs(new Random().nextInt(10)));
+		this.setStatus(score >= 7 ? ProtocolStatus.FINISHED : ProtocolStatus.FAILED);
 	}
 
 	public void start(){
 		status = ProtocolStatus.STARTED;
 		startTime = LocalDateTime.now();
 		// Queda el endtime con un random entre 10 segundos y 120
-		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(120 - 10) + 10));
+		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(110 - 10) + 10));
 
+	}
+
+	public String getRandomUUID() {
+		return randomUUID;
+	}
+
+	public void setRandomUUID(String randomUUID) {
+		this.randomUUID = randomUUID;
 	}
 
 	@JsonIgnore
