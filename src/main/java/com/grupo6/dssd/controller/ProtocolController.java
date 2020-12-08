@@ -30,11 +30,13 @@ public class ProtocolController {
 		return ResponseEntity.ok(protocolService.createProtocol(projectId));
 	}
 
-	@PostMapping("/project/{project_id}/protocol/start")
+	@PostMapping("/project/{project_id}/protocol/{uuid}/start")
 	public ResponseEntity<String> startProtocol(
-			@PathVariable(name = "project_id") Long projectId)
+			@PathVariable(name = "project_id") Long projectId,
+			@PathVariable(name = "uuid") String protocolUUID
+	)
 			 {
-		return ResponseEntity.ok(protocolService.startNewProtocol(projectId));
+		return ResponseEntity.ok(protocolService.startNewProtocol(projectId, protocolUUID));
 	}
 
 	@GetMapping("protocol/{protocol_id}/status")
@@ -42,6 +44,7 @@ public class ProtocolController {
 			@PathVariable(name = "protocol_id") String protocolUUID)
 			{
 		return ResponseEntity.ok(protocolService.getProtocol(protocolUUID));
+
 	}
 
 

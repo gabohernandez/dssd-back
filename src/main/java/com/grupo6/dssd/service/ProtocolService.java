@@ -32,15 +32,14 @@ public class ProtocolService {
 		return protocolRepository.save(new Protocol(this.getProjectById(projectId)));
 	}
 
-	public String startNewProtocol(Long projectId){
-		String protocolRandomId = UUID.randomUUID().toString();
+	public String startNewProtocol(Long projectId, String protocolUUID){
 		Project project = projectRepository.findById(projectId).orElseGet(() -> {
 			Project newProject = new Project();
 			newProject.setId(projectId);
-			newProject.setName("Proyecto_id_" + projectId + "_ran_" + protocolRandomId.substring(0, 7));
+			newProject.setName("Proyecto_id_" + projectId + "_ran_" + protocolUUID.substring(0, 7));
 			return projectRepository.save(newProject);
 		});
-		Protocol protocol = new Protocol(project, protocolRandomId);
+		Protocol protocol = new Protocol(project, protocolUUID);
 		protocol.start();
 		Protocol savedProtocol = protocolRepository.save(protocol);
 		return savedProtocol.getRandomUUID();
