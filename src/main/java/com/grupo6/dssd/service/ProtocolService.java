@@ -149,11 +149,19 @@ public class ProtocolService {
 	}
 
 	private void updateProjectStatus(Long projectId) {
+		boolean thereIsAtLeastOneStarted = protocolRepository.findByProjectId(projectId).stream().anyMatch(Protocol::isStarted);
+		if (thereIsAtLeastOneStarted) {
+			//Como hay uno que está started no le cambiamos el estado al proyecto
+			return;
+		}
+		
 		boolean allApproved = protocolRepository.findByProjectId(projectId).stream().allMatch(Protocol::isApproved);
+		Project p = projectRepository.findById(projectId).get();
 		if(allApproved) {
-			projectRepository.findById(projectId).get().setStatus("FINISHED");
+			p.setStatus("FINISHED");
 		} else
-			projectRepository.findById(projectId).get().setStatus("FAILED");
+			p.setStatus("FAILED");
+		projectRepository.save(p);
 	}
 
 	public void decideOnFailedProtocol(Long protocolId, ActionEnum actionEnum) {
