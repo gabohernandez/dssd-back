@@ -155,13 +155,12 @@ public class ProtocolService {
 			return;
 		}
 		
-		boolean allApproved = protocolRepository.findByProjectId(projectId).stream().allMatch(Protocol::isApproved);
-		Project p = projectRepository.findById(projectId).get();
-		if(allApproved) {
+		boolean allFinished = protocolRepository.findByProjectId(projectId).stream().allMatch(Protocol::isFinished);
+		if(allFinished) {
+			Project p = projectRepository.findById(projectId).get();
 			p.setStatus("FINISHED");
-		} else
-			p.setStatus("FAILED");
-		projectRepository.save(p);
+			projectRepository.save(p);
+		}
 	}
 
 	public void decideOnFailedProtocol(Long protocolId, ActionEnum actionEnum) {
@@ -172,9 +171,15 @@ public class ProtocolService {
 			if(actionEnum.equals(ActionEnum.RESTART_PROTOCOL)) this.restartProtocol(p);
 			if(actionEnum.equals(ActionEnum.RESTART_ALL)) this.restartProject(protocol.get().getProject().getId());
 			if(actionEnum.equals(ActionEnum.CANCEL_PROJECT)) this.cancelProject(protocol.get().getProject().getId());
-			if(actionEnum.equals(ActionEnum.CONTINUE)) this.updateProjectStatus(protocol.get().getProject().getId());
+			if(actionEnum.equals(ActionEnum.CONTINUE)) this.continueProtocol(protocol.get());
 		});
 
+	}
+	
+	private void continueProtocol(Protocol protocol) {
+		protocol.setStatus(ProtocolStatus.FINISHED);
+		protocolRepository.save(protocol);
+		this.updateProjectStatus(protocol.getProject().getId());
 	}
 
 	private void cancelProject(Long projectId) {

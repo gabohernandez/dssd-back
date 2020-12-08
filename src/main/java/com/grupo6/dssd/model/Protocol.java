@@ -100,9 +100,6 @@ public class Protocol {
 	}
 
 	public ProtocolStatus getStatus() {
-		if(!status.equals(ProtocolStatus.FINISHED)){
-			this.finish();
-		}
 		return status;
 	}
 
