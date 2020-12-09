@@ -37,7 +37,7 @@ public abstract class BonitaBaseClient {
 	}
 
 	protected WebClient webClient = WebClient.builder()
-			.baseUrl("http://localhost:49915/bonita")
+			.baseUrl("http://localhost:8080/bonita")
 			.exchangeStrategies(getStrategies())
 			.build();
 
