@@ -207,6 +207,7 @@ public class BonitaAPIClient extends BonitaBaseClient {
 			protocolos.put("persistenceId", p.getPersistenceId());
 			protocolos.put("ejecucion_local", p.isEjecucionLocal());
 			protocolos.put("proyecto_id", p.getProyectoId());
+			protocolos.put("protocolo_uuid", p.getProtocoloUUID());
 			((List<Object>) body.get("protocolosInput")).add(protocolos);
 		});
 		body.put("id_proyecto", idProject);

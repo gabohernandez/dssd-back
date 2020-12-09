@@ -2,6 +2,7 @@ package com.grupo6.dssd.model;
 
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.UUID;
 import javax.persistence.*;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -48,6 +49,9 @@ public class Protocol {
 	@Column(name = "BONITA_ASSIGNED_ID")
 	private long userAssignId;
 
+	@Column(name = "PROTOCOL_UUID")
+	private String protocolUUID;
+
 	public Protocol(){}
 
 	public Protocol(Project projectDto) {
@@ -57,6 +61,7 @@ public class Protocol {
 		endTime = LocalDateTime.MAX;
 		score = null;
 		approved = false;
+		protocolUUID = UUID.randomUUID().toString();
 	}
 
 	public Long getId() {
@@ -151,6 +156,14 @@ public class Protocol {
 
 	public void setUserAssignId(long userAssignId) {
 		this.userAssignId = userAssignId;
+	}
+
+	public String getProtocolUUID() {
+		return protocolUUID;
+	}
+
+	public void setProtocolUUID(String protocolUUID) {
+		this.protocolUUID = protocolUUID;
 	}
 
 	public void finish(){

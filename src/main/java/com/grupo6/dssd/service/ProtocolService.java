@@ -56,7 +56,6 @@ public class ProtocolService {
 			int idToAssign = bonitaAPIClient.getUsers().stream()
 					.filter(u -> u.userName.equalsIgnoreCase(protocol.getUser().getName())).findFirst().get().id;
 			protocol.setUserAssignId(idToAssign);
-
 		}
 		return protocolRepository.save(protocol);
 	}

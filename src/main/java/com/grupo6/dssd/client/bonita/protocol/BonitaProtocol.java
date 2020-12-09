@@ -17,6 +17,8 @@ public class BonitaProtocol {
 	private boolean activo;
 	@JsonProperty(value = "proyecto_id")
 	private long proyectoId;
+	@JsonProperty(value = "protocolo_uuid")
+	private String protocoloUUID;
 
 	public long getId() {
 		return id;
@@ -72,6 +74,14 @@ public class BonitaProtocol {
 
 	public void setProyectoId(long proyectoId) {
 		this.proyectoId = proyectoId;
+	}
+
+	public String getProtocoloUUID() {
+		return protocoloUUID;
+	}
+
+	public void setProtocoloUUID(String protocoloUUID) {
+		this.protocoloUUID = protocoloUUID;
 	}
 }
 

@@ -34,6 +34,7 @@ public class BonitaService {
 			bonitaProtocol.setPersistenceId(p.getId().toString());
 			bonitaProtocol.setNombre(p.getName());
 			bonitaProtocol.setResponsable(String.valueOf(p.getUserAssignId()));
+			bonitaProtocol.setProtocoloUUID(p.getProtocolUUID());
 			bonitaProtocols.add(bonitaProtocol);
 		});
 		Integer taskId = this.getTaskIdByTaskName("protocolos necesarios", protocols.get(0).getProject().getCaseId());
