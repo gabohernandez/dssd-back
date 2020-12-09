@@ -180,7 +180,7 @@ public class Protocol {
 		status = ProtocolStatus.STARTED;
 		startTime = LocalDateTime.now();
 		// Queda el endtime con un random entre 10 segundos y 120
-		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(120 - 10) + 10));
+		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(110 - 10) + 10));
 
 	}
 

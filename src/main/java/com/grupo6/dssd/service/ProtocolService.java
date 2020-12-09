@@ -11,6 +11,7 @@ import com.grupo6.dssd.api.request.ActionEnum;
 import com.grupo6.dssd.api.request.CreateProtocolDTO;
 import com.grupo6.dssd.client.bonita.BonitaAPIClient;
 import com.grupo6.dssd.client.bonita.protocol.BonitaProtocolResult;
+import com.grupo6.dssd.client.remote.RemoteClient;
 import com.grupo6.dssd.exception.InvalidOperationException;
 import com.grupo6.dssd.exception.InvalidProjectException;
 import com.grupo6.dssd.exception.ProjectNotFoundException;
@@ -35,14 +36,17 @@ public class ProtocolService {
 	private final UserRepository userRepository;
 	private final BonitaAPIClient bonitaAPIClient;
 	private final BonitaService bonitaService;
+	private final RemoteClient remoteClient;
 
 	public ProtocolService(ProtocolRepository protocolRepository, ProjectRepository projectRepository,
-			UserRepository userRepository, BonitaAPIClient bonitaAPIClient, BonitaService bonitaService) {
+			UserRepository userRepository, BonitaAPIClient bonitaAPIClient, BonitaService bonitaService,
+			RemoteClient remoteClient) {
 		this.protocolRepository = protocolRepository;
 		this.projectRepository = projectRepository;
 		this.userRepository = userRepository;
 		this.bonitaAPIClient = bonitaAPIClient;
 		this.bonitaService = bonitaService;
+		this.remoteClient = remoteClient;
 	}
 
 	public Protocol createProtocol(Long projectId, CreateProtocolDTO protocolDTO) throws ProjectNotFoundException {
@@ -110,7 +114,19 @@ public class ProtocolService {
 	}
 
 	public List<Protocol> findByProject(Long projectId)  {
-		return this.protocolRepository.findByProjectId(projectId);
+		List<Protocol> protocols = this.protocolRepository.findByProjectId(projectId);
+		// SI ES REMOTO Y NO ES EXITOSO, IR A BUSCAR EL PUNTAJE AL REMOTO
+		protocols.stream()
+				.filter(p -> !p.isLocal() && !p.isApproved() && !p.isFinished())// && !p.getStatus().equals(ProtocolStatus.PENDING))
+				.forEach(p -> {
+			p.setScore(remoteClient.getProtocolScore(p.getProtocolUUID()));
+			if(p.getScore() != null) {
+				if(p.getScore() >= 7) p.finish();
+				else p.toFail();
+			}
+			protocolRepository.save(p);
+		});
+		return protocols;
 	}
 	
 	public List<Protocol> findByUser(Long userId) {
@@ -184,7 +200,7 @@ public class ProtocolService {
 	private void cancelProject(Long projectId) {
 		protocolRepository.findByProjectId(projectId)
 				.forEach(p -> {
-					p.getProject().setStatus("CANCELLED");
+					p.getProject().setStatus("CANCELED");
 					p.setApproved(false);
 					p.setStatus(ProtocolStatus.FAILED);
 					protocolRepository.save(p);
@@ -196,17 +212,19 @@ public class ProtocolService {
 				.forEach(protocol -> {
 					protocol.getProject().setStatus("STARTED");
 					this.restartProtocol(protocol);
+					if(!protocol.isLocal())this.remoteClient.restartProtocol(protocol.getProtocolUUID());
 				});
 	}
 
 	private void restartProtocol(Protocol p) {
 		p.getProject().setStatus("STARTED");
 		p.setApproved(false);
-		p.setStatus(ProtocolStatus.PENDING);
+		p.setStatus(ProtocolStatus.STARTED);
 		p.setScore(null);
 		p.setStartTime(LocalDateTime.MAX);
 		p.setEndTime(LocalDateTime.MAX);
 		protocolRepository.save(p);
+		if(!p.isLocal())this.remoteClient.restartProtocol(p.getProtocolUUID());
 	}
 
 	public void startProject(Long projectId) throws Exception {
