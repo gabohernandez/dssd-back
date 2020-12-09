@@ -53,7 +53,7 @@ public class Protocol {
 		project = projectDto;
 		startTime = LocalDateTime.MAX;
 		endTime = LocalDateTime.MAX;
-		score = 0;
+		score = null;
 		protocolUUID = randomUUID;
 
 	}
@@ -109,7 +109,7 @@ public class Protocol {
 	}
 
 	public void finish(){
-		this.setScore(Math.abs(new Random().nextInt(10)));
+		if(score == null) this.setScore(Math.abs(new Random().nextInt(10)));
 		this.setStatus(score >= 7 ? ProtocolStatus.FINISHED : ProtocolStatus.FAILED);
 	}
 
@@ -118,6 +118,7 @@ public class Protocol {
 		startTime = LocalDateTime.now();
 		// Queda el endtime con un random entre 10 segundos y 120
 		endTime = startTime.plusSeconds(Math.abs(new Random().nextInt(110 - 10) + 10));
+		score = null;
 
 	}
 

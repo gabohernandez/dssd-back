@@ -1,6 +1,7 @@
 package com.grupo6.dssd.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -33,15 +34,18 @@ public class ProtocolService {
 	}
 
 	public String startNewProtocol(Long projectId, String protocolUUID){
-		Project project = projectRepository.findById(projectId).orElseGet(() -> {
-			Project newProject = new Project();
-			newProject.setId(projectId);
-			newProject.setName("Proyecto_id_" + projectId + "_ran_" + protocolUUID.substring(0, 7));
-			return projectRepository.save(newProject);
-		});
-		Protocol protocol = new Protocol(project, protocolUUID);
-		protocol.start();
-		Protocol savedProtocol = protocolRepository.save(protocol);
+		Optional<Protocol> protocol = protocolRepository.findByProtocolUUID(protocolUUID);
+		if(!protocol.isPresent()){
+			Project project = projectRepository.findById(projectId).orElseGet(() -> {
+				Project newProject = new Project();
+				newProject.setId(projectId);
+				newProject.setName("Proyecto_id_" + projectId + "_ran_" + protocolUUID.substring(0, 7));
+				return projectRepository.save(newProject);
+			});
+			protocol = Optional.of(new Protocol(project, protocolUUID));
+		}
+		protocol.get().start();
+		Protocol savedProtocol = protocolRepository.save(protocol.get());
 		return savedProtocol.getProtocolUUID();
 	}
 
@@ -80,13 +84,16 @@ public class ProtocolService {
 
 
 	public Integer getProtocol(String protocolUUID) {
-		return this.protocolRepository.findByRandomUUID(protocolUUID).map(protocol -> {
+		return this.protocolRepository.findByProtocolUUID(protocolUUID).map(protocol -> {
 			protocol.finish();
 			protocolRepository.save(protocol);
 			return protocol.getScore();
-		}).orElse(0);
+		}).orElse(null);
 	}
 
+	public Integer getProtocolScore(String protocolUUID) {
+		return this.protocolRepository.findByProtocolUUID(protocolUUID).map(Protocol::getScore).orElse(null);
+	}
 
 
 	private Project getProjectById(Long projectId) throws ProjectNotFoundException {
@@ -96,5 +103,14 @@ public class ProtocolService {
 
 	public List<Protocol> findAll() {
 		return this.protocolRepository.findAll();
+	}
+
+	public void restartProtocol(String protocolUUID) {
+		protocolRepository.findByProtocolUUID(protocolUUID).ifPresent(
+				p -> {
+					p.start();
+					protocolRepository.save(p);
+				}
+		);
 	}
 }

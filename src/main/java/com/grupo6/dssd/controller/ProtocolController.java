@@ -39,11 +39,28 @@ public class ProtocolController {
 		return ResponseEntity.ok(protocolService.startNewProtocol(projectId, protocolUUID));
 	}
 
-	@GetMapping("protocol/{protocol_id}/status")
-	public ResponseEntity<Integer> getProtocolScore(
-			@PathVariable(name = "protocol_id") String protocolUUID)
+	@GetMapping("protocol/{protocol_uuid}/status")
+	public ResponseEntity<Integer> getProtocolStatus(
+			@PathVariable(name = "protocol_uuid") String protocolUUID)
 			{
 		return ResponseEntity.ok(protocolService.getProtocol(protocolUUID));
+
+	}
+
+	@GetMapping("protocol/{protocol_uuid}/score")
+	public ResponseEntity<Integer> getProtocolScore(
+			@PathVariable(name = "protocol_uuid") String protocolUUID)
+	{
+		return ResponseEntity.ok(protocolService.getProtocolScore(protocolUUID));
+
+	}
+
+	@PutMapping("protocol/{protocol_uuid}/restart")
+	public ResponseEntity<Void> restartProtocol(
+			@PathVariable(name = "protocol_uuid") String protocolUUID)
+	{
+		protocolService.restartProtocol(protocolUUID);
+		return ResponseEntity.ok().build();
 
 	}
 
@@ -61,5 +78,7 @@ public class ProtocolController {
 	public ResponseEntity<List<Protocol>> allProtocolStatus() {
 		return ResponseEntity.ok(protocolService.findAll());
 	}
+
+
 
 }
