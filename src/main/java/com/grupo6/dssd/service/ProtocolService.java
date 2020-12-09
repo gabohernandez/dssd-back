@@ -42,7 +42,7 @@ public class ProtocolService {
 		Protocol protocol = new Protocol(project, protocolUUID);
 		protocol.start();
 		Protocol savedProtocol = protocolRepository.save(protocol);
-		return savedProtocol.getRandomUUID();
+		return savedProtocol.getProtocolUUID();
 	}
 
 	/*public Protocol startProtocol(Long projectId, Long protocolId)

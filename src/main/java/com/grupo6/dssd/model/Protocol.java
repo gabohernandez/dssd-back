@@ -31,8 +31,8 @@ public class Protocol {
 
 	private Integer score;
 
-	@Column(name = "UUID")
-	private String randomUUID;
+	@Column(name = "PROTOCOL_UUID")
+	private String protocolUUID;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "project_id")
@@ -54,7 +54,7 @@ public class Protocol {
 		startTime = LocalDateTime.MAX;
 		endTime = LocalDateTime.MAX;
 		score = 0;
-		this.randomUUID = randomUUID;
+		protocolUUID = randomUUID;
 
 	}
 
@@ -121,12 +121,12 @@ public class Protocol {
 
 	}
 
-	public String getRandomUUID() {
-		return randomUUID;
+	public String getProtocolUUID() {
+		return protocolUUID;
 	}
 
-	public void setRandomUUID(String randomUUID) {
-		this.randomUUID = randomUUID;
+	public void setProtocolUUID(String randomUUID) {
+		this.protocolUUID = randomUUID;
 	}
 
 	@JsonIgnore
