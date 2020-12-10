@@ -1,8 +1,9 @@
 package com.grupo6.dssd.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 import com.grupo6.dssd.exception.InvalidOperationException;
@@ -32,7 +33,23 @@ public class ProtocolService {
 		return protocolRepository.save(new Protocol(this.getProjectById(projectId)));
 	}
 
-	public Protocol startProtocol(Long projectId, Long protocolId)
+	public String startNewProtocol(Long projectId, String protocolUUID){
+		Optional<Protocol> protocol = protocolRepository.findByProtocolUUID(protocolUUID);
+		if(!protocol.isPresent()){
+			Project project = projectRepository.findById(projectId).orElseGet(() -> {
+				Project newProject = new Project();
+				newProject.setId(projectId);
+				newProject.setName("Proyecto_id_" + projectId + "_ran_" + protocolUUID.substring(0, 7));
+				return projectRepository.save(newProject);
+			});
+			protocol = Optional.of(new Protocol(project, protocolUUID));
+		}
+		protocol.get().start();
+		Protocol savedProtocol = protocolRepository.save(protocol.get());
+		return savedProtocol.getProtocolUUID();
+	}
+
+	/*public Protocol startProtocol(Long projectId, Long protocolId)
 			throws InvalidProjectException, ProtocolNotFoundException, InvalidOperationException {
 		Protocol protocol = this.protocolRepository
 				.findById(protocolId)
@@ -50,10 +67,11 @@ public class ProtocolService {
 		protocol.start();
 		this.protocolRepository.save(protocol);
 		return protocol;
-	}
+	}*/
 
+/*
 	public Protocol getProtocol(Long projectId, Long protocolId)
-			throws InvalidProjectException, ProtocolNotFoundException, InvalidOperationException {
+			throws InvalidProjectException, ProtocolNotFoundException {
 		Protocol protocol = this.protocolRepository
 				.findById(protocolId)
 				.orElseThrow(() -> new ProtocolNotFoundException("El protocolo con id " + protocolId + " no existe."));
@@ -61,6 +79,20 @@ public class ProtocolService {
 			throw new InvalidProjectException(String.format("El protocolo: [%s] no esta asociado al proyecto con id: %s.",
 					protocol, projectId));
 		return protocol;
+	}
+*/
+
+
+	public Integer getProtocol(String protocolUUID) {
+		return this.protocolRepository.findByProtocolUUID(protocolUUID).map(protocol -> {
+			protocol.finish();
+			protocolRepository.save(protocol);
+			return protocol.getScore();
+		}).orElse(null);
+	}
+
+	public Integer getProtocolScore(String protocolUUID) {
+		return this.protocolRepository.findByProtocolUUID(protocolUUID).map(Protocol::getScore).orElse(null);
 	}
 
 
@@ -71,5 +103,14 @@ public class ProtocolService {
 
 	public List<Protocol> findAll() {
 		return this.protocolRepository.findAll();
+	}
+
+	public void restartProtocol(String protocolUUID) {
+		protocolRepository.findByProtocolUUID(protocolUUID).ifPresent(
+				p -> {
+					p.start();
+					protocolRepository.save(p);
+				}
+		);
 	}
 }

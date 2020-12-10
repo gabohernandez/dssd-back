@@ -40,7 +40,7 @@ public class UserController {
 //		        .claim("authorities",
 //		                grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 		        .setIssuedAt(new Date(System.currentTimeMillis()))
-		        .setExpiration(new Date(System.currentTimeMillis() + 1200000))
+		        .setExpiration(new Date(System.currentTimeMillis() + 12000000))
 		        .signWith(SignatureAlgorithm.HS512, Constant.SECRET_KEY.getBytes()).compact();
 
 		return Constant.AUTHORIZATION_TYPE + token;
