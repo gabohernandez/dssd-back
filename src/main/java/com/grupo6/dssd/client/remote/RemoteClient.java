@@ -14,8 +14,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class RemoteClient {
 
 	private WebClient webClient = WebClient.builder()
-			.baseUrl("http://localhost:8082/")
-			//.baseUrl("http://dssd-grupo06.herokuapp.com/")
+			//.baseUrl("http://localhost:8082/")
+			.baseUrl("http://dssd-grupo06.herokuapp.com/")
 			.build();
 
 	private String remoteToken;
